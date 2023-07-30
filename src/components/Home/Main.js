@@ -18,17 +18,18 @@ const Main = () => {
         </div>
         {/* Top Total */}
         <TopTotal orders={orders} products={products} />
-
+        {/*
         <div className="row">
-          {/* STATICS */}
+           STATICS *
           <SaleStatistics />
           <ProductsStatistics />
         </div>
-
-        {/* LATEST ORDER */}
+          /}
+        {/* LATEST ORDER 
         <div className="card mb-4 shadow-sm">
           <LatestOrder orders={orders} loading={loading} error={error} />
         </div>
+        */}
       </section>
     </>
   );
