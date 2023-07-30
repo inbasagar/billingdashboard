@@ -43,6 +43,7 @@ return (
       </div>
 
       <div className="card mb-4 shadow-sm">
+      {/*}
         <header className="card-header bg-white ">
           <div className="row gx-3 py-3">
             <div className="col-lg-4 col-md-6 me-auto ">
@@ -69,7 +70,7 @@ return (
             </div>
           </div>
         </header>
-
+      */}
         <div className="card-body">
           {errorDelete && (
             <Message variant="alert-danger">{errorDelete}</Message>
