@@ -26,6 +26,9 @@ const EditProductMain = (props) => {
   const [image, setImage] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState("");
+  
 
   const dispatch = useDispatch();
 
@@ -52,6 +55,8 @@ const EditProductMain = (props) => {
         setCountInStock(product.countInStock);
         setImage(product.image);
         setPrice(product.price);
+        setHeight(product.size.height);
+        setWidth(product.size.width);
       }
     }
   }, [product, dispatch, productId, successUpdate]);
@@ -152,6 +157,28 @@ const EditProductMain = (props) => {
                           required
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">Description</label>
+                        <textarea
+                          placeholder="Type Height"
+                          className="form-control"
+                          
+                          required
+                          value={height}
+                          onChange={(e) => setHeight(e.target.value)}
+                        ></textarea>
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">Description</label>
+                        <textarea
+                          placeholder="Type width"
+                          className="form-control"
+                          
+                          required
+                          value={width}
+                          onChange={(e) => setWidth(e.target.value)}
                         ></textarea>
                       </div>
                       <div className="mb-4">

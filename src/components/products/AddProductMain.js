@@ -20,6 +20,8 @@ const AddProductMain = () => {
   const [image, setImage] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState(""); 
 
   const dispatch = useDispatch();
 
@@ -35,6 +37,9 @@ const AddProductMain = () => {
       setCountInStock(0);
       setImage("");
       setPrice(0);
+      setHeight(product.size.height);
+      setWidth(product.size.width);
+
     }
   }, [product, dispatch]);
 
@@ -120,6 +125,28 @@ const AddProductMain = () => {
                     ></textarea>
                   </div>
                   <div className="mb-4">
+                    <label className="form-label">Description</label>
+                    <textarea
+                      placeholder="Type Height"
+                       className="form-control"
+                          
+                      required
+                      value={height}
+                      onChange={(e) => setHeight(e.target.value)}
+                      ></textarea>
+                  </div>
+                  <div className="mb-4">
+                    <label className="form-label">Description</label>
+                    <textarea
+                        placeholder="Type width"
+                        className="form-control"
+                          
+                        required
+                        value={width}
+                        onChange={(e) => setWidth(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="mb-4">
                     <label className="form-label">Images</label>
                     <input
                       className="form-control"
@@ -129,7 +156,9 @@ const AddProductMain = () => {
                       required
                       onChange={(e) => setImage(e.target.value)}
                     />
+                    {/*
                     <input className="form-control mt-3" type="file" />
+                    */}
                   </div>
                 </div>
               </div>
