@@ -71,6 +71,8 @@ const EditProductMain = (props) => {
         description,
         image,
         countInStock,
+        height,
+        width,
       })
     );
   };
