@@ -160,7 +160,7 @@ const EditProductMain = (props) => {
                         ></textarea>
                       </div>
                       <div className="mb-4">
-                        <label className="form-label">Description</label>
+                        <label className="form-label">Height</label>
                         <textarea
                           placeholder="Type Height"
                           className="form-control"
@@ -171,7 +171,7 @@ const EditProductMain = (props) => {
                         ></textarea>
                       </div>
                       <div className="mb-4">
-                        <label className="form-label">Description</label>
+                        <label className="form-label">Width</label>
                         <textarea
                           placeholder="Type width"
                           className="form-control"
