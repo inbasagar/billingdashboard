@@ -8,7 +8,7 @@ const Sidebar = () => {
         <div className="aside-top">
           <Link to="/" className="brand-wrap">
             <img
-              src="/images/Krishna_Tanjore_Art_gallery.png"
+              src="/images/Krishna_Tanjore_Art_gallery_new.png"
               style={{ height: "46" }}
               className="logo"
               alt="Ecommerce dashboard template"
