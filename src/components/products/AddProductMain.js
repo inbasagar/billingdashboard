@@ -45,7 +45,7 @@ const AddProductMain = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createProduct(name, price, description, image, countInStock));
+    dispatch(createProduct(name, price, description, image, countInStock,height,width));
   };
 
   return (
@@ -125,7 +125,7 @@ const AddProductMain = () => {
                     ></textarea>
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Description</label>
+                    <label className="form-label">Height</label>
                     <textarea
                       placeholder="Type Height"
                        className="form-control"
@@ -136,7 +136,7 @@ const AddProductMain = () => {
                       ></textarea>
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Description</label>
+                    <label className="form-label">width</label>
                     <textarea
                         placeholder="Type width"
                         className="form-control"
