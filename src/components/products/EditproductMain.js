@@ -166,7 +166,7 @@ const EditProductMain = (props) => {
                         <textarea
                           placeholder="Type Height"
                           className="form-control"
-                          
+                          type="number"
                           required
                           value={height}
                           onChange={(e) => setHeight(e.target.value)}
@@ -177,7 +177,7 @@ const EditProductMain = (props) => {
                         <textarea
                           placeholder="Type width"
                           className="form-control"
-                          
+                          type="number"
                           required
                           value={width}
                           onChange={(e) => setWidth(e.target.value)}
