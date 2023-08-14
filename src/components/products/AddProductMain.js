@@ -37,8 +37,8 @@ const AddProductMain = () => {
       setCountInStock(0);
       setImage("");
       setPrice(0);
-      setHeight(product.size.height);
-      setWidth(product.size.width);
+      setHeight(0);
+      setWidth(0);
 
     }
   }, [product, dispatch]);

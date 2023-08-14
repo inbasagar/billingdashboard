@@ -55,8 +55,8 @@ const EditProductMain = (props) => {
         setCountInStock(product.countInStock);
         setImage(product.image);
         setPrice(product.price);
-        setHeight(product.size.height);
-        setWidth(product.size.width);
+        setHeight(product.height);
+        setWidth(product.width);
       }
     }
   }, [product, dispatch, productId, successUpdate]);
