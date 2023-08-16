@@ -22,7 +22,7 @@ const OrderDetailProducts = (props) => {
           <th style={{ width: "40%" }}>Product</th>
           <th style={{ width: "20%" }}>Unit Price</th>
           <th style={{ width: "20%" }}>Quantity</th>
-          {/*<th style={{ width: "20%" }}>Size</th>*/}
+          <th style={{ width: "20%" }}>Size</th> {/** size update*/}
           <th style={{ width: "20%" }} className="text-end">
             Total
           </th>
