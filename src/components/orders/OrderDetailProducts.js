@@ -46,7 +46,7 @@ const OrderDetailProducts = (props) => {
             </td>
             <td>{item.price} </td>
             <td>{item.qty} </td>
-            {/*<td>{item.height} X {item.width}</td>*/}
+            <td>{item.height} X {item.width}</td> {/**size update */}
             <td className="text-end"> ₹{item.qty * item.price}</td>
           </tr>
         ))}
