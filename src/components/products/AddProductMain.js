@@ -22,6 +22,8 @@ const AddProductMain = () => {
   const [description, setDescription] = useState("");
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState(""); 
+  const [price_11X11,setPrice11X11]=useState(0);
+  const [price_15X12,setPrice15X12]=usestate(0);
 
   const dispatch = useDispatch();
 
@@ -39,13 +41,16 @@ const AddProductMain = () => {
       setPrice(0);
       setHeight(0);
       setWidth(0);
+      setPrice11X11(0);
+      setPrice15X12(0);
+
 
     }
   }, [product, dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createProduct(name, price, description, image, countInStock,height,width));
+    dispatch(createProduct(name, price, description, image, countInStock,height,width,price_11X11,price_15X12));
   };
 
   return (
@@ -145,6 +150,34 @@ const AddProductMain = () => {
                         value={width}
                         onChange={(e) => setWidth(e.target.value)}
                     ></textarea>
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="product_price" className="form-label">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="product_price"
+                      required
+                      value={price_11X11}
+                      onChange={(e) => setPrice11X11(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="product_price" className="form-label">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="product_price"
+                      required
+                      value={price_15X12}
+                      onChange={(e) => setPrice15X12(e.target.value)}
+                    />
                   </div>
                   <div className="mb-4">
                     <label className="form-label">Images</label>
