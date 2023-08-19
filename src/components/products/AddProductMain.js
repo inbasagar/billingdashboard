@@ -23,7 +23,7 @@ const AddProductMain = () => {
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState(""); 
   const [price_11X11,setPrice11X11]=useState(0);
-  const [price_15X12,setPrice15X12]=usestate(0);
+  const [price_15X12,setPrice15X12]=useState(0);
 
   const dispatch = useDispatch();
 
