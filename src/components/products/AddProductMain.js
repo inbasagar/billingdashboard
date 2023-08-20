@@ -40,8 +40,8 @@ const AddProductMain = () => {
       setCountInStock(0);
       setImage("");
       setPrice();
-      setHeight(0);
-      setWidth(0);
+      setHeight();
+      setWidth();
       {/** 
       setPrice11X11(0);
       setPrice15X12(0);
