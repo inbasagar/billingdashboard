@@ -22,9 +22,10 @@ const AddProductMain = () => {
   const [description, setDescription] = useState("");
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState(""); 
+  {/*}
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);
-
+  */} 
   const dispatch = useDispatch();
 
   const productCreate = useSelector((state) => state.productCreate);
@@ -41,16 +42,17 @@ const AddProductMain = () => {
       setPrice(0);
       setHeight(0);
       setWidth(0);
+      {/** 
       setPrice11X11(0);
       setPrice15X12(0);
-
+      */}
 
     }
   }, [product, dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createProduct(name, price, description, image, countInStock,height,width,price_11X11,price_15X12));
+    dispatch(createProduct(name, price, description, image, countInStock,height,width));
   };
 
   return (
@@ -151,9 +153,10 @@ const AddProductMain = () => {
                         onChange={(e) => setWidth(e.target.value)}
                     ></textarea>
                   </div>
+                  {/** 
                   <div className="mb-4">
                     <label htmlFor="product_price" className="form-label">
-                      Price
+                      Price of 11 X 11 Size
                     </label>
                     <input
                       type="number"
@@ -167,7 +170,7 @@ const AddProductMain = () => {
                   </div>
                   <div className="mb-4">
                     <label htmlFor="product_price" className="form-label">
-                      Price
+                      Price of 15 X 12 Size
                     </label>
                     <input
                       type="number"
@@ -179,6 +182,7 @@ const AddProductMain = () => {
                       onChange={(e) => setPrice15X12(e.target.value)}
                     />
                   </div>
+                  */}
                   <div className="mb-4">
                     <label className="form-label">Images</label>
                     <input

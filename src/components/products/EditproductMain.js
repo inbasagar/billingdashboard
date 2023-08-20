@@ -28,7 +28,13 @@ const EditProductMain = (props) => {
   const [description, setDescription] = useState("");
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState("");
-  
+  {/** 
+  const [price_11X11,setPrice11X11]=useState(0);
+  const [price_15X12,setPrice15X12]=useState(0);  
+  const [price_10X8,setPrice10X8]=useState(0);
+  const [price_10X12,setPrice10X12]=useState(0);
+  const [price_12X15,setPrice12X15]=useState(0);
+  */}
 
   const dispatch = useDispatch();
 
@@ -57,6 +63,13 @@ const EditProductMain = (props) => {
         setPrice(product.price);
         setHeight(product.height);
         setWidth(product.width);
+        {/** 
+        setPrice11X11(product.price_11X11);
+        setPrice15X12(product.price_15X12);
+        setPrice10X8(product.price_10X8);
+        setPrice10X12(product.price_10X12);
+        setPrice12X15(product.price_12X15);
+        */}
       }
     }
   }, [product, dispatch, productId, successUpdate]);
@@ -73,6 +86,7 @@ const EditProductMain = (props) => {
         countInStock,
         height,
         width,
+
       })
     );
   };
@@ -183,6 +197,78 @@ const EditProductMain = (props) => {
                           onChange={(e) => setWidth(e.target.value)}
                         ></textarea>
                       </div>
+                      {/** 
+                      <div className="mb-4">
+                        <label className="form-label">
+                           Price of 11 X 11 Size
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Type here"
+                          className="form-control"
+                          id="product_price"
+                          required
+                          value={price_11X11}
+                          onChange={(e) => setPrice11X11(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">
+                          Price of 15 X 12 Size
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Type here"
+                            className="form-control"
+                          id="product_price"
+                          required
+                          value={price_15X12}
+                          onChange={(e) => setPrice15X12(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">
+                          Price of 10 X 8 Size
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Type here"
+                            className="form-control"
+                          id="product_price"
+                          required
+                          value={price_10X8}
+                          onChange={(e) => setPrice10X8(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">
+                          Price of 10 X 12 Size
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Type here"
+                            className="form-control"
+                          id="product_price"
+                          required
+                          value={price_10X12}
+                          onChange={(e) => setPrice10X12(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">
+                          Price of 12 X 15 Size
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Type here"
+                            className="form-control"
+                          id="product_price"
+                          required
+                          value={price_12X15}
+                          onChange={(e) => setPrice12X15(e.target.value)}
+                        />
+                      </div>
+                      */}
                       <div className="mb-4">
                         <label className="form-label">Images</label>
                         <input
