@@ -39,7 +39,7 @@ const AddProductMain = () => {
       setDescription("");
       setCountInStock(0);
       setImage("");
-      setPrice(0);
+      setPrice();
       setHeight(0);
       setWidth(0);
       {/** 
