@@ -8,6 +8,24 @@ const TopTotal = (props) => {
       order.isPaid === true ? (totalSale = totalSale + order.totalPrice) : null
     );
   }
+
+  
+    const [totalProducts, setTotalProducts] = useState(0); // Initialize with 0
+  
+    // Simulate fetching the total count of products from an API
+    useEffect(() => {
+      // Replace this with your actual API call
+      const fetchTotalProducts = async () => {
+        // Simulate fetching the total count
+        const totalResponse = await fetch("/api/products/total");
+        const totalCount = await totalResponse.json();
+  
+        setTotalProducts(totalCount);
+      };
+  
+      fetchTotalProducts();
+    }, []);
+  
   return (
     <div className="row">
       <div className="col-lg-4">
@@ -44,7 +62,7 @@ const TopTotal = (props) => {
             </span>
             <div className="text">
               <h6 className="mb-1">Total Products</h6>
-              {products ? <span>{products.length}</span> : <span>0</span>}
+              {products ? <span>{totalProducts}</span> : <span>0</span>}
             </div>
           </article>
         </div>
