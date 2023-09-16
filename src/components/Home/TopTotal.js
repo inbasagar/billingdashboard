@@ -17,7 +17,7 @@ const TopTotal = (props) => {
       // Replace this with your actual API call
       const fetchTotalProducts = async () => {
         // Simulate fetching the total count
-        const totalResponse = await fetch("/api/products/total");
+        const totalResponse = await fetch("/products/all");
         const totalCount = await totalResponse.json();
   
         setTotalProducts(totalCount);
