@@ -1,25 +1,83 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect ,useState} from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { listUser } from "../../Redux/Actions/userActions";
+//import { listUser } from "../../Redux/Actions/userActions";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
+//import Orders from "./Orders";
+import Customer from "../users/Customer"
+import Pagination from "../products/pagination";
+import { listCustomer,  listcustomers,deleteCustomer } from "../../Redux/Actions/customerActions";
+import { saveShippingAddress } from "../../Redux/Actions/cartActions";
+import { listProducts } from "../../Redux/Actions/ProductActions";
+//import { deleteCustomer } from './../../Redux/Actions/customerActions';
 
-const UserComponent = () => {
+
+
+
+
+const UserComponent = (props) => {
+  
+  // const{keyword: propKeyword, pagenumber } = props;
+ 
+ const { keyword: propKeyword, pagenumber } = props;
+ const [keyword, setKeyword] = useState(propKeyword );
+  //const { keyword: propKeyword, keyword1: propKeyword1, pagenumber } = props;
+  
+  //const [keyword1, setKeyword1] = useState(propKeyword1);
+  
+  //const { keyword1: propKeyword1, keyword2: propKeyword2, pagenumber } = props;
+  //const [keyword1, setKeyword1] = useState(propKeyword1);
+  //const [keyword2, setKeyword2] = useState(propKeyword2);
+
   const dispatch = useDispatch();
+  let history = useHistory();
 
-  const userList = useSelector((state) => state.userList);
-  const { loading, error, users } = userList;
+  const customerList = useSelector((state) => state.customerList);
+  const { loading, error, customers, page, pages } = customerList;
+ //const { loading, error, customers, page, pages } = customerList;
+
+  //console.log('Customers:', customers);
+  const customerDelete = useSelector((state) => state.customerDelete);
+  const { error: errorDelete, success: successDelete } = customerDelete;
+  //const UserList = useSelector((state) => state.UserList);
+  //const { loading, error, users, page, pages } = UserList;
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+    //  history.push(`/search/${keyword}`);
+      history.push(`/customers/${keyword}`);
+    } else {
+      history.push("/");
+    }
+  };
+  const orderHandler=(customer)=>
+  {
+    
+    //dispatch(saveShippingAddress({name: customer.name,email:customer.email}));
+    dispatch(saveShippingAddress({name :customer.name,email:customer.email,phone:customer.phone,address:customer.address,city:customer.city,country:customer.country,postalCode:customer.postalCode}));
+    history.push("/placeordert");
+  };
+
+  const deleteCustomerHandler = (id) => {
+    if (window.confirm("Are you sure??")) {
+      dispatch(deleteCustomer(id));
+    }
+  };
 
   useEffect(() => {
-    dispatch(listUser());
-  }, [dispatch]);
+    dispatch(listcustomers(keyword, pagenumber));
+  }, [dispatch, keyword, pagenumber, successDelete]);
+
+
+
   return (
+    
     <section className="content-main">
       <div className="content-header">
         <h2 className="content-title">Customers</h2>
         <div>
-          <Link to="#" className="btn btn-primary">
+          <Link to="/addUser" className="btn btn-primary">
             <i className="material-icons md-plus"></i> Create new
           </Link>
         </div>
@@ -28,92 +86,86 @@ const UserComponent = () => {
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
-            <div className="col-lg-4 col-md-6 me-auto">
+            <form className="col-lg-4 col-md-6 me-auto" onSubmit={submitHandler}>
               <input
+                list="search_terms"
                 type="text"
-                placeholder="Search..."
                 className="form-control"
+                placeholder="Search term"
+                onChange={(e) => setKeyword(e.target.value)}
               />
-            </div>
-            <div className="col-lg-2 col-6 col-md-3">
-              <select className="form-select">
-                <option>Show 20</option>
-                <option>Show 30</option>
-                <option>Show 40</option>
-                <option>Show all</option>
-              </select>
-            </div>
-            <div className="col-lg-2 col-6 col-md-3">
-              <select className="form-select">
-                <option>Status: all</option>
-                <option>Active only</option>
-                <option>Disabled</option>
-              </select>
-            </div>
+            </form>
           </div>
         </header>
+      </div>
 
-        {/* Card */}
-        <div className="card-body">
+      <table className="table border table-lg">
+        <thead>
+          <tr>
+            <th style={{ width: "20%" }}>Name</th>
+            <th style={{ width: "10%" }}>Phone</th>
+            <th style={{ width: "10%" }}>Email</th>
+            <th style={{ width: "20%" }}>Address</th>
+            <th style={{ width: "10%" }}>View</th>
+
+            <th style={{ width: "10%" }} className="">
+              Bill
+            </th>
+            <th style={{ width: "10%" }} className="">
+              Delete
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {errorDelete && <Message variant="alert-danger">{errorDelete}</Message>}
           {loading ? (
             <Loading />
           ) : error ? (
             <Message variant="alert-danger">{error}</Message>
           ) : (
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
-              {users.map((user) => (
-                <div className="col" key={user._id}>
-                  <div className="card card-user shadow-sm">
-                    <div className="card-header">
-                      <img
-                        className="img-md img-avatar"
-                        src="images/favicon.png"
-                        alt="User pic"
-                      />
-                    </div>
-                    <div className="card-body">
-                      <h5 className="card-title mt-5">{user.name}</h5>
-                      <div className="card-text text-muted">
-                        {user.isAdmin === true ? (
-                          <p className="m-0">Admin</p>
-                        ) : (
-                          <p className="m-0">Customer</p>
-                        )}
+            <>
+              {customers.map((customer) => (
+                <tr key={customer._id}>
+                  <Customer customer={customer} />
+                  <td>{customer.name}</td>
+                  <td>{customer.email}</td>
+                  <td>{customer.phone}</td>
+                  <td>{customer.address}</td>
+                  <td>
+                    <Link
+                      to={`/customer/${customer._id}/edit`}
+                      className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
+                    >
+                     <i class="fa fa-eye" aria-hidden="true"></i>
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to="#"
+                      onClick={() => orderHandler(customer)}
+                      className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
+                    >
+                      <i class="fa fa-truck" aria-hidden="true"></i>
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to="#"
+                      onClick={() => deleteCustomerHandler(customer._id)}
+                      className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6"
+                    >
+                      <i className="fas fa-trash-alt"></i>
+                    </Link>
+                  </td>
 
-                        <p>
-                          <a href={`mailto:${user.email}`}>{user.email}</a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </tr>
               ))}
-            </div>
+            </>
           )}
-
-          {/* nav */}
-          <nav className="float-end mt-4" aria-label="Page navigation">
-            <ul className="pagination">
-              <li className="page-item disabled">
-                <Link className="page-link" to="#">
-                  Previous
-                </Link>
-              </li>
-              <li className="page-item active">
-                <Link className="page-link" to="#">
-                  1
-                </Link>
-              </li>
-              <li className="page-item">
-                <Link className="page-link" to="#">
-                  Next
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
+        </tbody>
+      </table>
     </section>
+
   );
 };
 

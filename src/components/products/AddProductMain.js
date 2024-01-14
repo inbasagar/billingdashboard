@@ -7,6 +7,8 @@ import { createProduct } from "./../../Redux/Actions/ProductActions";
 import Toast from "../LoadingError/Toast";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
+import { createProducttnagar } from "../../Redux/Actions/ProductActionst";
+import { createProductannanagar } from "../../Redux/Actions/ProductActionsanna";
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -22,6 +24,8 @@ const AddProductMain = () => {
   const [description, setDescription] = useState("");
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState(""); 
+  const [isavailability,setIsavailability]= useState("");
+  const[branch,setBranch]=useState("");
   {/*}
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);
@@ -42,6 +46,8 @@ const AddProductMain = () => {
       setPrice();
       setHeight();
       setWidth();
+      setIsavailability("shop");
+      setBranch("");
       {/** 
       setPrice11X11(0);
       setPrice15X12(0);
@@ -52,24 +58,28 @@ const AddProductMain = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createProduct(name, price, description, image, countInStock,height,width));
-  };
+  
+    const buttonClicked = e.nativeEvent.submitter.name;
+  
+    if (buttonClicked === "addToTnagar") {
+      dispatch(createProducttnagar(name, price, description, image, countInStock, height, width, isavailability, "tnagar"));
+    }
+    if(buttonClicked === "addToAnnanagar")
+    {
+      dispatch(createProductannanagar(name, price, description, image, countInStock, height, width, isavailability, "annanagar"));
+    } 
 
+  };
   return (
     <>
       <Toast />
       <section className="content-main" style={{ maxWidth: "1200px" }}>
-        <form onSubmit={submitHandler}>
+        <form onSubmit={(e) => submitHandler(e, "tnagar")}>
           <div className="content-header">
             <Link to="/products" className="btn btn-danger text-white">
               Go to products
             </Link>
             <h2 className="content-title">Add product</h2>
-            <div>
-              <button type="submit" className="btn btn-primary">
-                Publish now
-              </button>
-            </div>
           </div>
 
           <div className="row mb-4">
@@ -121,17 +131,6 @@ const AddProductMain = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Description</label>
-                    <textarea
-                      placeholder="Type here"
-                      className="form-control"
-                      rows="7"
-                      required
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    ></textarea>
-                  </div>
-                  <div className="mb-4">
                     <label className="form-label">Height</label>
                     <textarea
                       placeholder="Type Height"
@@ -153,6 +152,19 @@ const AddProductMain = () => {
                         onChange={(e) => setWidth(e.target.value)}
                     ></textarea>
                   </div>
+                  {/** 
+                  <div className="mb-4">
+                    <label className="form-label">Branch</label>
+                    <textarea
+                        placeholder="Type branch"
+                        className="form-control"
+                          
+                        required
+                        value={branch}
+                        onChange={(e) => setBranch(e.target.value)}
+                    ></textarea>
+                  </div>
+*/}
                   {/** 
                   <div className="mb-4">
                     <label htmlFor="product_price" className="form-label">
@@ -182,7 +194,7 @@ const AddProductMain = () => {
                       onChange={(e) => setPrice15X12(e.target.value)}
                     />
                   </div>
-                  */}
+                  
                   <div className="mb-4">
                     <label className="form-label">Images</label>
                     <input
@@ -193,15 +205,39 @@ const AddProductMain = () => {
                       required
                       onChange={(e) => setImage(e.target.value)}
                     />
+                    
                     {/*
                     <input className="form-control mt-3" type="file" />
-                    */}
+                   
                   </div>
+                */}
                 </div>
               </div>
             </div>
+            <div className="col-lg-4">
+            <div className="content-header">
+              <button type="submit" className="btn btn-primary mb-2" name="all">
+                Publish Now
+              </button>
+              <button type="submit" className="btn btn-primary mb-2" name="addToTnagar">
+                Add to T.Nagar
+              </button>
+
+            </div>
+            <div className="content-header">
+              <button type="submit" className="btn btn-primary mb-2" name="addToAnnanagar">
+                Add to Annanagar
+              </button>
+              <button type="submit" className="btn btn-primary mb-2" name="addToTnagar">
+                Add to Adayar
+              </button>
+            </div>
           </div>
+          
+          </div>
+
         </form>
+
       </section>
     </>
   );

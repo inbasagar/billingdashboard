@@ -13,8 +13,33 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
   ORDER_PAY_SUCCESS,
+  ORDER_MARK_TOBETAKEN_FAIL,ORDER_MARK_TOBETAKEN_REQUEST,ORDER_MARK_TOBETAKEN_SUCCESS,
+  ORDER_MARK_DELIVERED_FAIL,ORDER_MARK_DELIVERED_REQUEST,ORDER_MARK_DELIVERED_SUCCESS,ORDER_CREATE_REQUEST,ORDER_CREATE_SUCCESS,ORDER_CREATE_FAIL,ORDER_CREATE_RESET, ORDER_MARK_TOBETAKEN_RESET, ORDER_MARK_DELIVERED_RESET
 } from "../Constants/OrderConstants";
-
+const initialState = {
+  orders: [],
+  orderDetails: { orderItems: [], shippingAddress: {} },
+  orderMarkDelivered: {
+    loading: false,
+    success: false,
+    error: null,
+  },
+  // other properties...
+};
+export const orderCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_CREATE_REQUEST:
+      return { loading: true };
+    case ORDER_CREATE_SUCCESS:
+      return { loading: false, success: true, order: action.payload };
+    case ORDER_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    case ORDER_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
 export const orderListReducer = (state = { orders: [] }, action) => {
   switch (action.type) {
     case ORDER_LIST_REQUEST:
@@ -75,4 +100,74 @@ export const orderPaidReducer = (state = {}, action) => {
     default:
       return state;
   }
+};
+export const orderMarkDeliveredReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_MARK_DELIVERED_REQUEST:
+      return {
+        //...state,
+        //orderMarkDelivered: {
+          //...state.orderMarkDelivered,
+          loading: true
+       // },
+      };
+    case ORDER_MARK_DELIVERED_SUCCESS:
+      return {
+        //...state,
+      //  orderMarkDelivered: {
+        //  ...state.orderMarkDelivered,
+          loading: false,
+          success: true
+      //  },
+      };
+    case ORDER_MARK_DELIVERED_FAIL:
+      return {
+       // ...state,
+       // orderMarkDelivered: {
+       //   ...state.orderMarkDelivered,
+          loading: false,
+          error: action.payload
+       // },
+      };
+      case ORDER_MARK_DELIVERED_RESET:
+        return {};
+       
+    default:
+      return state;
+  }
+};
+  export const orderMarkTobetakenReducer = (state = {}, action) => {
+    switch (action.type) {
+      case ORDER_MARK_TOBETAKEN_REQUEST:
+        return {
+          //...state,
+          //orderMarkDelivered: {
+            //...state.orderMarkDelivered,
+            loading: true
+         // },
+        };
+      case ORDER_MARK_TOBETAKEN_SUCCESS:
+        return {
+          //...state,
+        //  orderMarkDelivered: {
+          //  ...state.orderMarkDelivered,
+            loading: false,
+            success: true
+        //  },
+        };
+      case ORDER_MARK_TOBETAKEN_FAIL:
+        return {
+         // ...state,
+         // orderMarkDelivered: {
+         //   ...state.orderMarkDelivered,
+            loading: false,
+            error: action.payload
+         // },
+        };
+        case ORDER_MARK_TOBETAKEN_RESET:
+          return {};
+         
+      default:
+        return state;
+    }
 };

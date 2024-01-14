@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link,useHistory } from "react-router-dom";
 import $ from "jquery";
-import { useDispatch  } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import { useState } from "react";
 import { logout } from "../Redux/Actions/userActions"; //
 
@@ -9,6 +9,9 @@ const Header = () => {
   const [keyword, setKeyword] = useState();
   const dispatch = useDispatch();
   let history = useHistory();
+  const userInfo = useSelector((state) => state.userLogin.userInfo);
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
   useEffect(() => {
     $("[data-trigger]").on("click", function (e) {
       e.preventDefault();
@@ -35,7 +38,7 @@ const Header = () => {
     e.preventDefault();
     if (keyword.trim()) {
     //  history.push(`/search/${keyword}`);
-      history.push(`/order/${keyword}`);
+      history.push(`/bill/${keyword}`);
     } else {
       history.push("/");
     }
@@ -73,11 +76,31 @@ const Header = () => {
           <i className="md-28 fas fa-bars"></i>
         </button>
         <ul className="nav">
-          <li className="nav-item">
-            <Link className={`nav-link btn-icon `} title="Dark mode" to="#">
-              <i className="fas fa-moon"></i>
-            </Link>
+          {/** 
+          <li class="nav-item">
+            <Link className="nav-link btn-icon" to="/cart">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+              <span className="badge">{cartItems.length}</span>
+            </Link>        
           </li>
+          */} 
+          {userInfo && ((userInfo.isOwner === true) || (userInfo.isAdmin === true && userInfo.branch === "tnagar"))&&(
+          <li class="nav-item">
+            <Link className="nav-link btn-icon" to="/cartt">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+              <span className="badge">{cartItems.length}</span>
+            </Link>        
+          </li> 
+          )}
+                    {userInfo && ((userInfo.isOwner === true) || (userInfo.isAdmin === true && userInfo.branch === "annanagar"))&&(
+          <li class="nav-item">
+            <Link className="nav-link btn-icon" to="/carta">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+              <span className="badge">{cartItems.length}</span>
+            </Link>        
+          </li> 
+          )}
+
           <li className="nav-item">
             <Link className="nav-link btn-icon" to="#">
               <i className="fas fa-bell"></i>
@@ -92,7 +115,7 @@ const Header = () => {
             <Link className="dropdown-toggle" data-bs-toggle="dropdown" to="#">
               <img
                 className="img-xs rounded-circle"
-                src="/images/logo.jpg"
+                src="/images/"
                 alt="User"
               />
             </Link>

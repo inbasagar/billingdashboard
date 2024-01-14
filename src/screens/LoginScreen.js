@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/LoadingError/Loading";
 import Toast from "../components/LoadingError/Toast";
-import { login } from "../Redux/Actions/userActions";
 import Message from "./../components/LoadingError/Error";
+import { login } from "../Redux/Actions/userActions";
+
 
 const Login = ({ history }) => {
   window.scrollTo(0, 0);
@@ -11,21 +12,23 @@ const Login = ({ history }) => {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-
+  //const redirect = location.search?location.search.split("=")[1]:"/";
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;
 
-  useEffect(() => {
-    if (userInfo) {
-      history.push("/");
-    }
-  }, [userInfo, history]);
+ // const redirect = location.search ? location.search.split("=")[1] : "/";
+ useEffect(() => {
+  if (userInfo) {
+    history.push("/");
+  }
+}, [userInfo, history]);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(login(email, password));
-  };
+ const submitHandler = (e) => {
+  e.preventDefault();
+  dispatch(login(email, password));
+ };
   return (
+    <>
     <>
       <Toast />
       <div
@@ -64,6 +67,7 @@ const Login = ({ history }) => {
           </form>
         </div>
       </div>
+    </>
     </>
   );
 };

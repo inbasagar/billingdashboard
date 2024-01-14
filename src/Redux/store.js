@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { userListReducer, userLoginReducer } from "./Reducers/userReducers";
+import { userListReducer, userLoginReducer, userCreateReducer, userDeleteReducer, userEditReducer, userUpdateReducer } from "./Reducers/userReducers";
 import {
   productCreateReducer,
   productDeleteReducer,
@@ -9,12 +9,21 @@ import {
   productListReducer,
   productUpdateReducer,
 } from "./Reducers/ProductReducers";
+
+import { customerCreateReducer, customerListReducer, customerEditReducer, customerUpdateReducer, customerDeleteReducer } from "./Reducers/CustomerReducer";
 import {
+  orderCreateReducer,
   orderDeliveredReducer,
   orderDetailsReducer,
   orderListReducer,
-  orderPaidReducer
+  orderMarkDeliveredReducer,
+  orderMarkTobetakenReducer,
+  orderPaidReducer,
+
 } from "./Reducers/OrderReducres";
+import { cartReducer } from "./Reducers/CartReducers";
+
+
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -24,10 +33,23 @@ const reducer = combineReducers({
   productCreate: productCreateReducer,
   productEdit: productEditReducer,
   productUpdate: productUpdateReducer,
+
   orderList: orderListReducer,
   orderDetails: orderDetailsReducer,
   orderDeliver: orderDeliveredReducer,
-  orderpaid:orderPaidReducer
+  orderMarkDelivered:orderMarkDeliveredReducer,
+ orderMarkTobetaken:orderMarkTobetakenReducer,
+  orderpaid:orderPaidReducer,
+  orderCreate:orderCreateReducer,
+
+  customerCreate:customerCreateReducer,
+  customerList: customerListReducer,
+  customerEdit: customerEditReducer,
+  customerUpdate: customerUpdateReducer,
+  customerDelete:customerDeleteReducer,
+  cart: cartReducer,
+
+
 });
 
 // login

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 
+
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -49,7 +50,7 @@ const EditProductMain = (props) => {
   } = productUpdate;
 
   useEffect(() => {
-    if (successUpdate) {
+    if (successUpdate && !loadingUpdate && !errorUpdate)  {
       dispatch({ type: PRODUCT_UPDATE_RESET });
       toast.success("Product Updated", ToastObjects);
     } else {
@@ -72,7 +73,7 @@ const EditProductMain = (props) => {
         */}
       }
     }
-  }, [product, dispatch, productId, successUpdate]);
+  }, [product, dispatch, productId, successUpdate,loadingUpdate, errorUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

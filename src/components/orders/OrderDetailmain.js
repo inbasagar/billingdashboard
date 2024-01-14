@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import easyinvoice from 'easyinvoice';
 import OrderDetailProducts from "./OrderDetailProducts";
 import OrderDetailInfo from "./OrderDetailInfo";
 import { Link } from "react-router-dom";
@@ -14,6 +15,127 @@ import Message from "../LoadingError/Error";
 import moment from "moment";
 
 const OrderDetailmain = (props) => {
+
+ 
+function downloadinvoice()
+{
+  var data = {
+    // If not using the free version, set your API key
+    // "apiKey": "123abc", // Get apiKey through: https://app.budgetinvoice.com/register
+    
+    // Customize enables you to provide your own templates
+    // Please review the documentation for instructions and examples
+    "customize": {
+        //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+    },
+    "images": {
+        // The logo on top of your invoice
+        "logo": "https://public.budgetinvoice.com/img/logo_en_original.png",
+        // The invoice background
+      
+    },
+    // Your own data
+    "sender": {
+        "company": "Sample Corp",
+        "address": "Sample Street 123",
+        "zip": "1234 AB",
+        "city": "Sampletown",
+        "country": "Samplecountry"
+        //"custom1": "custom value 1",
+        //"custom2": "custom value 2",
+        //"custom3": "custom value 3"
+    },
+    // Your recipient
+    "client": {
+        "company": "Client Corp",
+        "address": "Clientstreet 456",
+        "zip": "4567 CD",
+        "city": "Clientcity",
+        "country": "Clientcountry"
+        // "custom1": "custom value 1",
+        // "custom2": "custom value 2",
+        // "custom3": "custom value 3"
+    },
+    "information": {
+        // Invoice number
+        "number": "2021.0001",
+        // Invoice data
+        "date": "12-12-2021",
+        // Invoice due date
+        "due-date": "31-12-2021"
+    },
+    // The products you would like to see on your invoice
+    // Total values are being calculated automatically
+    "products": [
+ 
+    ],
+    // The message you would like to display on the bottom of your invoice
+    "bottom-notice": "Kindly pay your invoice within 15 days.",
+    // Settings to customize your invoice
+    "settings": {
+        "currency": "USD", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
+        // "margin-top": 25, // Defaults to '25'
+        // "margin-right": 25, // Defaults to '25'
+        // "margin-left": 25, // Defaults to '25'
+        // "margin-bottom": 25, // Defaults to '25'
+        // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // "height": "1000px", // allowed units: mm, cm, in, px
+        // "width": "500px", // allowed units: mm, cm, in, px
+        // "orientation": "landscape", // portrait or landscape, defaults to portrait
+    },
+    // Translate your invoice to your preferred language
+    "translate": {
+        // "invoice": "FACTUUR",  // Default to 'INVOICE'
+        // "number": "Nummer", // Defaults to 'Number'
+        // "date": "Datum", // Default to 'Date'
+        // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+        // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+        // "products": "Producten", // Defaults to 'Products'
+        // "quantity": "Aantal", // Default to 'Quantity'
+        // "price": "Prijs", // Defaults to 'Price'
+        // "product-total": "Totaal", // Defaults to 'Total'
+        // "total": "Totaal", // Defaults to 'Total'
+        // "vat": "btw" // Defaults to 'vat'
+    },
+};
+easyinvoice.createInvoice(data, function (result) {
+  // The response will contain a base64 encoded PDF file
+  if (result.pdf) {
+    const blob = base64StringToBlob(result.pdf, 'application/pdf');
+    const dataUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `${order._id}.pdf`;
+    a.click();
+  } else {
+    console.error('PDF data is missing or invalid.');
+  }
+});
+
+
+}
+function base64StringToBlob(base64String, mimeType) {
+  const byteCharacters = atob(base64String);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+    const slice = byteCharacters.slice(offset, offset + 512);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  return new Blob(byteArrays, { type: mimeType });
+}
+
+//Create your invoice! Easy!
+
   const { orderId } = props;
   const dispatch = useDispatch();
 
@@ -89,23 +211,25 @@ const OrderDetailmain = (props) => {
                   <option>Shipped</option>
                   <option>Delivered</option>
                 </select>
-                <Link className="btn btn-success ms-2" to="#">
+                <button  className="btn btn-success ms-2" onClick={downloadinvoice}>
                   <i className="fas fa-print"></i>
-                </Link>
+                </button>
               </div>
             </div>
           </header>
+          
           <div className="card-body">
-            {/* Order info */}
+        
             <OrderDetailInfo order={order} />
 
             <div className="row">
-              <div className="col-lg-9">
+              <div className="col-lg-12">
                 <div className="table-responsive">
                   <OrderDetailProducts order={order} loading={loading} />
                 </div>
               </div>
-              {/* Payment Info */}
+            
+              {/** 
               <div className="col-lg-3">
                 <div className="box shadow-sm bg-light">
                   {order.isDelivered ? (
@@ -144,11 +268,14 @@ const OrderDetailmain = (props) => {
                     </>
                   )}
                 </div>
+                
               
               </div>
-
+             */}
             </div>
+          
           </div>
+         
         </div>
       )}
     </section>

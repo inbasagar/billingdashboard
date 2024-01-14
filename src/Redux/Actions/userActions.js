@@ -8,10 +8,36 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
 } from "../Constants/UserContants";
-import Axios from "../axios.js";
+import axios from "axios";
 import { toast } from "react-toastify";
 
+{/*
+export const login = (email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_LOGIN_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(`/api/users/login`,{ email, password }, config);
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+    localStorage.setItem("userInfo", JSON.stringify(data));
+} catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+*/}
 // LOGIN
+
 export const login = (email, password) => async (dispatch) => {
   const ToastObjects = {
     pauseOnFocusLoss: false,
@@ -28,11 +54,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await Axios.post(
-      `/api/users/login`,
-      { email, password },
-      config
-    );
+    const { data } = await axios.post(`/api/users/login`,{ email, password },config);
 
     if (!data.isAdmin === true) {
       toast.error("You are not Admin", ToastObjects);
@@ -41,9 +63,12 @@ export const login = (email, password) => async (dispatch) => {
       });
     } else {
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+  
+      
     }
-
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    
+    
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -59,6 +84,8 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
+
+
 // LOGOUT
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
@@ -67,6 +94,7 @@ export const logout = () => (dispatch) => {
 };
 
 // ALL USER
+
 export const listUser = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
@@ -81,7 +109,7 @@ export const listUser = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await Axios.get(`/api/users/`, config);
+    const { data } = await axios.get(`/api/users`, config);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -98,3 +126,4 @@ export const listUser = () => async (dispatch, getState) => {
     });
   }
 };
+
