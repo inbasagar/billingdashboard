@@ -54,7 +54,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(`/api/users/login`,{ email, password },config);
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`,{ email, password },config);
 
     if (!data.isAdmin === true) {
       toast.error("You are not Admin", ToastObjects);
