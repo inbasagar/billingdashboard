@@ -13,9 +13,10 @@ import { createOrder, updateProductCounts } from "../Redux/Actions/OrderActions"
 import { editProduct, updateProduct } from "../Redux/Actions/ProductActions";
 import { editCustomer } from "../Redux/Actions/customerActions";
 import { createOrder_tnagar } from "../Redux/Actions/OrderActions_tnagar";
+import { EST_tnagar } from "../Redux/Actions/ESTActions";
 
 const PlaceOrderScreen_tnagar = ({ history }) => {
-  window.scrollTo(0, 0);
+ // window.scrollTo(0, 0);
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -27,9 +28,12 @@ const PlaceOrderScreen_tnagar = ({ history }) => {
   const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
   const[billedby, setBilledby]= useState("");
+  const[cashamt,setcashamt]=useState(0);
   const[upiamt,setupiamt]=useState(0);
   const[upiacctno,setupiacctno]=useState(0);
-
+  const[bankamt,setbankamt]=useState(0);
+  const[bankacctno,setbankacctno]=useState(0);
+  const[tax,setTax]=useState(0);
   const { userInfo } = userLogin;
 
   const addDecimals = (num) => {
@@ -40,9 +44,11 @@ const PlaceOrderScreen_tnagar = ({ history }) => {
     cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
  cart.shippingPrice = shipping;
- const total=cart.totalPrice-discount;
- const pendingvar=total-upiamt;
-  cart.taxPrice = addDecimals(Number((0* cart.itemsPrice).toFixed(2)));
+ //const total=cart.totalPrice-discount;
+ //const totatpaid=upiamt+bankamt+cashamt;
+ const total = cart.totalPrice - discount-cashamt-bankamt-upiamt;
+ const pendingvar=total;
+  cart.taxPrice = addDecimals(Number((tax/100* cart.itemsPrice).toFixed(2)));
   cart.totalPrice = (
     Number(cart.itemsPrice) +
     Number(cart.shippingPrice) +
@@ -85,6 +91,13 @@ const orderCreate = useSelector((state) => state.orderCreate)||{} ;
     amount: Number(upiamt),
     acct_no: upiacctno,
   };
+  const cash = {
+    amount: Number(cashamt),
+  };
+  const bank = {
+    amount: Number(bankamt),
+    acct_no: bankacctno,
+  };
 {/*
 const placeOrderHandler = async (orderItems, dispatch) => {  
   try {
@@ -114,7 +127,7 @@ const placeOrderHandler = async (orderItems, dispatch) => {
 
       //updateproducthandler(e);
       // Call createOrder action
-      dispatch(createOrder_tnagar({
+      const createdOrder = await dispatch(createOrder_tnagar({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
@@ -126,11 +139,32 @@ const placeOrderHandler = async (orderItems, dispatch) => {
         grandtotal:total,
         followedby:billedby,
         upi:upi,
+        cash:cash,
+        bank:bank,
         pending:pendingvar,
 
       }));
-   
-      history.push(`/ordert/${order._id}`);
+      //console.log(createOrder);
+      if (createdOrder) {
+        // Access the order details including the assigned code
+        const { _id, code } = createdOrder;
+        console.log(code);
+        // Perform actions with the order details
+        dispatch(EST_tnagar({
+          shippingAddress: cart.shippingAddress,
+          grandtotal: total,
+          pending: pendingvar,
+          followedby: billedby,
+          upi: upi,
+          cash: cash,
+          bank: bank,
+          order_id: _id,  // Pass the order ID if needed
+          order_code: code,  // Pass the assigned code if needed
+        }));
+  
+        history.push(`/ordert/${_id}`);
+      }
+    //  history.push(`/ordert/${order._id}`);
      // dispatch({ type: ORDER_CREATE_RESET });
     //  history.push(`/order/${order._id}`);
 
@@ -289,7 +323,20 @@ const placeOrderHandler = async (orderItems, dispatch) => {
                   <td>
                     <strong>Tax</strong>
                   </td>
-                  <td>₹{cart.taxPrice}</td>
+                  <td>
+
+                  <select
+      className="form-control"
+      value={tax}
+      onChange={(e) => setTax(e.target.value)}
+    >
+      <option value="">Select Tax</option>
+      <option value="12">12%</option>
+      <option value="18">18%</option>
+      {/* Add more options as needed */}
+    </select>
+                  </td>
+               
                 </tr>
                 <tr>
                   <td>
@@ -305,6 +352,48 @@ const placeOrderHandler = async (orderItems, dispatch) => {
                           onChange={(e) => setDiscount(e.target.value)}
                         />
                   </td>
+                </tr>
+                <tr>
+                  <td>
+                  <strong>BANK</strong></td>
+                  <td>
+                      <input
+                          type="number"
+                          placeholder="Type here"
+                          className="form-control"
+                          id="product_price"
+                          required
+                          value={bankamt}
+                          onChange={(e) => setbankamt(e.target.value)}
+                        />
+                  </td>
+                  <td>
+                      <input
+                          type="number"
+                          placeholder="Type here"
+                          className="form-control"
+                          id="product_price"
+                          required
+                          value={bankacctno}
+                          onChange={(e) => setbankacctno(e.target.value)}
+                        />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                  <strong>CASH</strong></td>
+                  <td>
+                      <input
+                          type="number"
+                          placeholder="Type here"
+                          className="form-control"
+                          id="product_price"
+                          required
+                          value={cashamt}
+                          onChange={(e) => setcashamt(e.target.value)}
+                        />
+                  </td>
+ 
                 </tr>
                 <tr>
                   <td>
@@ -342,7 +431,7 @@ const placeOrderHandler = async (orderItems, dispatch) => {
                   <td>
                     <strong>Pending balance</strong>
                   </td>
-                  <td>₹{cart.totalPrice-discount-upiamt}</td>
+                  <td>₹{cart.totalPrice-discount-upiamt-cashamt-bankamt}</td>
                 </tr>
                 <tr>
                   <td>

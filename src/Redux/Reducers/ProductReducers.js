@@ -18,7 +18,10 @@ import {
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
-  PRODUCT_DETAILS_SUCCESS
+  PRODUCT_DETAILS_SUCCESS,
+  NEWPRODUCT_LIST_REQUEST,NEWPRODUCT_LIST_SUCCESS,NEWPRODUCT_LIST_FAIL,
+  NEWPRODUCT_CREATE_FAIL,NEWPRODUCT_CREATE_REQUEST,NEWPRODUCT_CREATE_RESET,NEWPRODUCT_CREATE_SUCCESS
+  
 } from "../Constants/ProductConstants";
 
 // ALL PRODUCTS
@@ -33,6 +36,23 @@ export const productListReducer = (state = { products: [] }, action) => {
         page:action.payload.page,
         products: action.payload.products };
     case PRODUCT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const newarrivalsListReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case NEWPRODUCT_LIST_REQUEST:
+      return { loading: true, products: [] };
+    case NEWPRODUCT_LIST_SUCCESS:
+      return { loading: false, 
+        //products: action.payload,
+        pages:action.payload.pages,
+        page:action.payload.page,
+        products: action.payload.products };
+    case NEWPRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
@@ -54,6 +74,20 @@ export const productDeleteReducer = (state = {}, action) => {
 };
 
 // DELETE PRODUCT
+export const newarrivalsCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case NEWPRODUCT_CREATE_REQUEST:
+      return { loading: true };
+    case NEWPRODUCT_CREATE_SUCCESS:
+      return { loading: false, success: true, product: action.payload };
+    case NEWPRODUCT_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    case NEWPRODUCT_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
 export const productCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case PRODUCT_CREATE_REQUEST:
@@ -68,6 +102,7 @@ export const productCreateReducer = (state = {}, action) => {
       return state;
   }
 };
+
 
 // EDIT PRODUCT
 export const productEditReducer = (

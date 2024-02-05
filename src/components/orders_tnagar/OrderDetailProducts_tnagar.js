@@ -10,6 +10,7 @@ import easyinvoice from 'easyinvoice';
 import Loading from "../LoadingError/Loading";
 import { markItemAsDelivered, markItemAsPaid, markItemAstobetaken, markItemAsundelievered, paidOrder, updatependingbank_tnagar, updatependingcash_tnagar, updatependingupi_tnagar } from "../../Redux/Actions/OrderActions_tnagar";
 import { orderMarkTobetaken } from './../../Redux/Reducers/OrderReducres';
+import { updatesalesexpensebankupdate, updatesalesexpensecashupdate, updatesalesexpenseupiupdate } from "../../Redux/Actions/ESTActions";
 const OrderDetailProducts_tnagar = (props) => {
   const { order, loading } = props;
   const dispatch = useDispatch();
@@ -196,9 +197,9 @@ function base64StringToBlob(base64String, mimeType) {
 const history = useHistory();
  // const orderMarkDelivered = useSelector((state) => state.orderMarkDelivered);
   //const { loading, success, error } = orderMarkDelivered;
-  const orderMarkDelivered = useSelector((state) => state.orderMarkDelivered) || {}; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
+  const orderMarkDelivered = useSelector((state) => state.orderMarkDelivered) ; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
   const { loading: loadingisproductDelivered,success: successproductdelivered } = orderMarkDelivered;
-  const orderMarkTobetaken = useSelector((state) => state.orderMarkTobetaken) || {}; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
+  const orderMarkTobetaken = useSelector((state) => state.orderMarkTobetaken) ; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
   const { loading: loadingisproducttobetaken,success: successproducttobetaken } = orderMarkTobetaken;
 
   const orderMarkPaid = useSelector((state) => state.orderMarkPaid) || {}; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
@@ -223,33 +224,53 @@ const history = useHistory();
     }
   }, [order, selectedStatus]);
 
-  const [pendingcash, setpendingCash] = useState("");
+  useEffect(() => {
+    // This block will be executed whenever orderDetails changes
+    // Make sure to handle the updated data appropriately
+  }, [orderMarkDelivered]);
+
+  const [pendingcashamt, setpendingCash] = useState("");
   //const [pendingcashacct, setpendingCashacctno] = useState("");
-  const [pendingbank, setpendingBank] = useState("");
+  const [pendingbankamt, setpendingBank] = useState("");
   const [pendingbankacct, setpendingBankacctno] = useState("");
-  const [pendingupi, setpendingUpi] = useState("");
+  const [pendingupiamt, setpendingUpi] = useState("");
   const [pendingupiacct, setpendingUpiacctno] = useState("");
+  const pendingcash = {
+    amount: Number(pendingcashamt),
+  };
+  const pendingUPI = {
+    amount: Number(pendingupiamt),
+    acct_no: String(pendingupiacct),
+  };
+  const pendingBANK = {
+    amount: Number(pendingbankamt),
+    acct_no: String(pendingbankacct),
+  };
   const handlependingcash = async (orderId) => {
     console.log(orderId);
   
-    dispatch(updatependingcash_tnagar(orderId, pendingcash));
+    dispatch(updatependingcash_tnagar(orderId, pendingcashamt));
+    dispatch(updatesalesexpensecashupdate(orderId,pendingcashamt));
     //history.push(`/ordert/${orderId}`);
   };
+
   const handlependingbank = async (orderId) => {
     console.log(orderId);
   
-    dispatch(updatependingbank_tnagar(orderId, pendingbank,pendingbankacct));
+    dispatch(updatependingbank_tnagar(orderId, pendingbankamt,pendingbankacct));
+    dispatch(updatesalesexpensebankupdate(orderId,pendingBANK));
   //  history.push(`/ordert/${orderId}`);
   };
   const handlependingupi = async (orderId) => {
     console.log(orderId);
   
-    dispatch(updatependingupi_tnagar(orderId, pendingupi,pendingupiacct));
+    dispatch(updatependingupi_tnagar(orderId, pendingupiamt,pendingupiacct));
+    dispatch(updatesalesexpenseupiupdate(orderId,pendingUPI));
     //history.push(`/ordert/${orderId}`);
   };
   const handleStatusChange = async (orderId, itemId) => {
     const selectedProduct = order.orderItems.find((item) => item._id === itemId);
-
+    console.log('handleStatusChange called with', orderId, itemId, selectedStatus);
     if (!selectedProduct) {
       console.error('Selected product not found');
       return;
@@ -258,13 +279,15 @@ const history = useHistory();
     switch (selectedStatus) {
       case 'delivered':
          dispatch(markItemAsDelivered(orderId, itemId));
+
       //   history.replace(`/ordert/${orderId}`);
 
         break;
       case 'toBeTaken':
          dispatch(markItemAstobetaken(orderId, itemId));
+         console.log("clicked to be taken")
         // history.push(`/ordert/${orderId}`);
-         dispatch(markItemAsundelievered(orderId, itemId));
+       //  dispatch(markItemAsundelievered(orderId, itemId));
         break;
       case 'notDelivered':
          dispatch(markItemAsundelievered(orderId, itemId));
@@ -504,7 +527,7 @@ const history = useHistory();
         <dt>{`Amount paid with cash_pending ${index + 1}:`}</dt>
         <dd>
           <b className="h5">₹{cashItem.amount}</b>
-          <span>{` Acct No: ${cashItem.acctno}`}</span>
+          <span>{` Acct No: ${cashItem.acct_no}`}</span>
         </dd>
       </div>
     ))
@@ -517,7 +540,7 @@ const history = useHistory();
         <dt>{`Amount paid with Pending amount with UPI ${index + 1}:`}</dt>
         <dd>
           <b className="h5">₹{upiItem.amount}</b>
-          <span>{` Acct No: ${upiItem.acctno}`}</span>
+          <span>{` Acct No: ${upiItem.acct_no}`}</span>
         </dd>
       </div>
     ))
@@ -530,7 +553,7 @@ const history = useHistory();
         <dt>{`Amount paid with pending amount with bank ${index + 1}:`}</dt>
         <dd>
           <b className="h5">₹{bankItem.amount}</b>
-          <span>{` Acct No: ${bankItem.acctno}`}</span>
+          <span>{` Acct No: ${bankItem.acct_no}`}</span>
         </dd>
       </div>
     ))
@@ -543,7 +566,7 @@ const history = useHistory();
                        className="form-control"
                           
                       required
-                      value={pendingcash}
+                      value={pendingcashamt}
                       onChange={(e) => setpendingCash(e.target.value)}
                       ></textarea>
                       {loadingPay && <Loading />}
@@ -558,7 +581,7 @@ const history = useHistory();
                        className="form-control"
                           
                       required
-                      value={pendingupi}
+                      value={pendingupiamt}
                       onChange={(e) => setpendingUpi(e.target.value)}
                       ></textarea>
                                           <textarea
@@ -581,7 +604,7 @@ const history = useHistory();
                        className="form-control"
                           
                       required
-                      value={pendingbank}
+                      value={pendingbankamt}
                       onChange={(e) => setpendingBank(e.target.value)}
                       ></textarea>
                                           <textarea

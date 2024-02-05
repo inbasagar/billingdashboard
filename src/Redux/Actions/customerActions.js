@@ -201,7 +201,7 @@ export const listCustomerDetails = (id) => async (dispatch) => {
   
   // CREATE USER
   export const createCustomer =
-    (name, email,phone,address,city,country,postalCode) =>
+    (name, email,phone,address,city,country,postalCode,gstno) =>
     async (dispatch, getState) => {
       try {
         dispatch({ type: CUSTOMER_CREATE_REQUEST });
@@ -218,7 +218,7 @@ export const listCustomerDetails = (id) => async (dispatch) => {
   
         const { data } = await Axios.post(
           `/api/customers/`,
-          { name, email,phone,address,city,country,postalCode},
+          { name, email,phone,address,city,country,postalCode,gstno},
           config
         );
   

@@ -55,7 +55,7 @@ const UserComponent_tnagar = (props) => {
   {
     
     //dispatch(saveShippingAddress({name: customer.name,email:customer.email}));
-    dispatch(saveShippingAddress({name :customer.name,email:customer.email,phone:customer.phone,address:customer.address,city:customer.city,country:customer.country,postalCode:customer.postalCode}));
+    dispatch(saveShippingAddress({name :customer.name,email:customer.email,phone:customer.phone,address:customer.address,city:customer.city,country:customer.country,postalCode:customer.postalCode,GSTNO:customer.GSTNO}));
     history.push("/placeordert");
   };
 

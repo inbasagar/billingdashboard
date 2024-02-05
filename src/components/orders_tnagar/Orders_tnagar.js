@@ -28,8 +28,7 @@ const Orders_tnagar = (props) => {
         {orders.map((order) => (
           
           <tr key={order._id}>
-            <td><b></b></td>
-
+            <td><b>{order.code}</b></td>
             <td>
               {order.followedby.name}
             </td>

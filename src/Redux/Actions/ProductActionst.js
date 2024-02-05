@@ -16,7 +16,13 @@ import {
     PRODUCT_UPDATE_SUCCESS,
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_FAIL,
-    PRODUCT_DETAILS_SUCCESS
+    PRODUCT_DETAILS_SUCCESS,
+    NEWPRODUCT_LIST_SUCCESS,
+    NEWPRODUCT_LIST_REQUEST,
+    NEWPRODUCT_LIST_FAIL,
+    NEWPRODUCT_CREATE_FAIL,
+    NEWPRODUCT_CREATE_SUCCESS,
+    NEWPRODUCT_CREATE_REQUEST
   } from "../Constants/ProductConstants";
   import Axios from "../axios.js";
   import { logout } from "./userActions";
@@ -49,6 +55,37 @@ import {
       }
       dispatch({
         type: PRODUCT_LIST_FAIL,
+        payload: message,
+      });
+    }
+  };
+  export const listNewarrivalstnagar = (keyword = " ",pageNumber=" ") => async (dispatch, getState) => {
+    try {
+      dispatch({ type: NEWPRODUCT_LIST_REQUEST });
+  
+      const {
+        userLogin: { userInfo },
+      } = getState();
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+  
+      const { data } = await Axios.get(`/api/newarrivalst?pageNumber=${pageNumber}&keyword=${keyword}`, config);
+  //?pageNumber=${pageNumber}
+      dispatch({ type: NEWPRODUCT_LIST_SUCCESS, payload: data });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(logout());
+      }
+      dispatch({
+        type: NEWPRODUCT_LIST_FAIL,
         payload: message,
       });
     }
@@ -226,7 +263,7 @@ import {
     };
   // CREATE PRODUCT
   export const createProducttnagar =
-    (name, price, description, image, countInStock,height,width,isavailability,branch)=>
+    (name, price, description, image, countInStock,size,isavailability,branch)=>
     async (dispatch, getState) => {
       try {
         dispatch({ type: PRODUCT_CREATE_REQUEST });
@@ -243,10 +280,22 @@ import {
   
         const { data } = await Axios.post(
           `/api/productst/`,
-          { name, price, description, image, countInStock,height,width,isavailability,branch},
+          { name, price, description, image, countInStock,size,isavailability,branch},
           config
         );
-  
+        const {code}=data;
+        console.log(code);
+        const { data1 } = await Axios.post(
+          `/api/newarrivalst/`,// product,
+          { name, price, description, image, countInStock,code,isavailability,branch,size},
+   
+         
+          config
+        );
+
+        console.log(data);
+        console.log(data1);
+
         dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: data });
       } catch (error) {
         const message =
@@ -262,7 +311,53 @@ import {
         });
       }
     };
+      // CREATE PRODUCT
+      export const createNewarrivaltnagar =
+      (name, price, description, image, countInStock,code,size,isavailability,branch)=>
+      async (dispatch, getState) => {
+        try {
+          dispatch({ type: NEWPRODUCT_CREATE_REQUEST });
+    
+          const {
+            userLogin: { userInfo },
+          } = getState();
+    
+          const config = {
+            headers: {
+              Authorization: `Bearer ${userInfo.token}`,
+            },
+          };
+    
+
+   
+          const { data } = await Axios.post(
+            `/api/newarrivalst/`,// product,
+            { name, price, description, image, countInStock,code,size,isavailability,branch},
+
+     
+           
+            config
+          );
   
+          console.log(data);
+
+  
+          dispatch({ type: NEWPRODUCT_CREATE_SUCCESS, payload: data });
+        } catch (error) {
+          const message =
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message;
+          if (message === "Not authorized, token failed") {
+            dispatch(logout());
+          }
+          dispatch({
+            type: NEWPRODUCT_CREATE_FAIL,
+            payload: message,
+          });
+        }
+      };
+
   // EDIT PRODUCT
   export const editProducttnagar = (id) => async (dispatch) => {
     try {
@@ -284,7 +379,25 @@ import {
     }
   };
   
-   
+  export const editNewarrivalstnagar = (id) => async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_EDIT_REQUEST });
+      const { data } = await Axios.get(`/api/newarrivalst/${id}`);
+      dispatch({ type: PRODUCT_EDIT_SUCCESS, payload: data });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(logout());
+      }
+      dispatch({
+        type: PRODUCT_EDIT_FAIL,
+        payload: message,
+      });
+    }
+  };
   export const updateProductCountstnagar = (
     productId,
     name,
@@ -293,7 +406,8 @@ import {
     image,
     countInStock,
     height,
-    width
+    width,
+    size
   ) => async (dispatch, getState) => {
     try {
       dispatch({ type: PRODUCT_UPDATE_REQUEST });
@@ -318,9 +432,10 @@ import {
           countInStock,
           height,
           width,
+          size,
         };
         console.log("inside updateproductcount");
-        console.log(countInStock,productId,name,price,description,);
+        console.log(countInStock,productId,name,price,description,size);
         const { data } = await Axios.put(
           `/api/productst/${productId}`,
           updatedProduct,
@@ -486,11 +601,65 @@ import {
       });
     }
   };
+
+  export const updateNewarrivalstnagar = (product) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: PRODUCT_UPDATE_REQUEST });
+  
+      const {
+        userLogin: { userInfo },
+      } = getState();
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+  
+      const { data } = await Axios.put(
+        `/api/newarrivalst/${product._id}`,
+        product,
+        config
+      );
+  
+      dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
+      dispatch({ type: PRODUCT_EDIT_SUCCESS, payload: data });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(logout());
+      }
+      dispatch({
+        type: PRODUCT_UPDATE_FAIL,
+        payload: message,
+      });
+    }
+  };
   
   export const listProductDetailstnagar = (id) => async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_DETAILS_REQUEST });
       const { data } = await Axios.get(`/api/productst/${id}`);
+      dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_DETAILS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+  
+  export const listNewarrivalsDetailstnagar = (id) => async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_DETAILS_REQUEST });
+      const { data } = await Axios.get(`/api/newarrivalst/${id}`);
       dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
     } catch (error) {
       dispatch({

@@ -26,6 +26,7 @@ const EditCustomerMain = (props) => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [postalCode, setPostalCode] = useState();
+  const[gstno,setGSTNO]=useState("");
   {/** 
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);  
@@ -70,6 +71,7 @@ const EditCustomerMain = (props) => {
         setCity(customer.city);
         setCountry(customer.country);
         setPostalCode(customer.postalCode);
+        setGSTNO(customer.GSTNO);
         {/** 
         setPrice11X11(product.price_11X11);
         setPrice15X12(product.price_15X12);
@@ -94,7 +96,7 @@ const EditCustomerMain = (props) => {
         name,
         email,
         phone,
-        address,city,country,postalCode
+        address,city,country,postalCode,gstno
 
       })
     );
@@ -111,7 +113,7 @@ const EditCustomerMain = (props) => {
             <h2 className="content-title">Add Customer</h2>
             <div>
               <button type="submit" className="btn btn-primary">
-                Create now
+                Update 
               </button>
             </div>
           </div>
@@ -227,7 +229,20 @@ const EditCustomerMain = (props) => {
                       onChange={(e) => setCountry(e.target.value)}
                     />
                   </div>
- 
+                  <div className="mb-4">
+                    <label htmlFor="product_title" className="form-label">
+                    GSTNO
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="product_title"
+                      required
+                      value={gstno}
+                      onChange={(e) => setGSTNO(e.target.value)}
+                    />
+                  </div>
                     </>
                   )}
                 </div>

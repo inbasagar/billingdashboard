@@ -7,8 +7,14 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
+  USER_CREATE_REQUEST,
+  USER_REGISTER_SUCCESS,
+USER_REGISTER_REQUEST,
+  USER_REGISTER_FAIL,
+
 } from "../Constants/UserContants";
-import axios from "axios";
+//import axios from "axios";
+import Axios from "../axios";
 import { toast } from "react-toastify";
 
 {/*
@@ -54,8 +60,8 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`,{ email, password },config);
-
+   // const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`,{ email, password },config);
+   const { data } = await Axios.post(`/api/users/login`,{ email, password },config);
     if (!data.isAdmin === true) {
       toast.error("You are not Admin", ToastObjects);
       dispatch({
@@ -84,6 +90,31 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
+export const register = (name,  password) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_REGISTER_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await Axios.post(`/api/users/`,{ name,  password },config);
+    dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 
 // LOGOUT
@@ -109,7 +140,7 @@ export const listUser = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/users`, config);
+    const { data } = await Axios.get(`/api/users`, config);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {

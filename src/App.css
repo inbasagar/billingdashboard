@@ -1253,3 +1253,21 @@ ul.row-sm {
     .signature {
       text-align: right;
     }
+
+
+    .billing-info {
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      max-width: 500px;
+      margin: 20px auto; /* Center align billing-info */
+    }
+    .product-details {
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 767px) {
+      .product-details {
+        margin-bottom: 0;
+      }
+    }

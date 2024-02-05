@@ -7,7 +7,7 @@ import { createProduct } from "./../../Redux/Actions/ProductActions";
 import Toast from "../LoadingError/Toast";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { createProducttnagar } from "../../Redux/Actions/ProductActionst";
+import { createNewarrivaltnagar, createProducttnagar } from "../../Redux/Actions/ProductActionst";
 import { createProductannanagar } from "../../Redux/Actions/ProductActionsanna";
 
 const ToastObjects = {
@@ -26,6 +26,7 @@ const AddProductMain = () => {
   const [width, setWidth] = useState(""); 
   const [isavailability,setIsavailability]= useState("");
   const[branch,setBranch]=useState("");
+  const[size,setSize]=useState("");
   {/*}
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);
@@ -48,6 +49,7 @@ const AddProductMain = () => {
       setWidth();
       setIsavailability("shop");
       setBranch("");
+      setSize("");
       {/** 
       setPrice11X11(0);
       setPrice15X12(0);
@@ -56,20 +58,38 @@ const AddProductMain = () => {
     }
   }, [product, dispatch]);
 
-  const submitHandler = (e) => {
+  const submitHandler =  async (e) => {
     e.preventDefault();
   
     const buttonClicked = e.nativeEvent.submitter.name;
   
     if (buttonClicked === "addToTnagar") {
-      dispatch(createProducttnagar(name, price, description, image, countInStock, height, width, isavailability, "tnagar"));
+      const createdproduct=   dispatch(createProducttnagar(name, price, description, image, countInStock,size,isavailability,"tnagar"));
+      console.log("outside",createdproduct);
+      if (createdproduct) {
+        // createdproduct the order details including the assigned code
+        const { _id, code } = createdproduct;
+        console.log("createproduct");
+        console.log(code);
+        // Perform actions with the order details
+       // dispatch(createNewarrivaltnagar({name:name, price:price, description:description, image:image, countInStock:countInStock,product_code:code ,size:size, isavailability:isavailability, branch:"tnagar"}));
+
+  
+ 
+      }
     }
+
     if(buttonClicked === "addToAnnanagar")
     {
       dispatch(createProductannanagar(name, price, description, image, countInStock, height, width, isavailability, "annanagar"));
     } 
 
+
+   
+    
+
   };
+
   return (
     <>
       <Toast />
@@ -130,13 +150,14 @@ const AddProductMain = () => {
                       onChange={(e) => setCountInStock(e.target.value)}
                     />
                   </div>
+                  {/** 
                   <div className="mb-4">
                     <label className="form-label">Height</label>
                     <textarea
                       placeholder="Type Height"
                        className="form-control"
                           
-                      required
+                      
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
                       ></textarea>
@@ -147,11 +168,25 @@ const AddProductMain = () => {
                         placeholder="Type width"
                         className="form-control"
                           
-                        required
+                        
                         value={width}
                         onChange={(e) => setWidth(e.target.value)}
                     ></textarea>
                   </div>
+                  */}
+                  <div className="mb-4">
+                    <label className="form-label">size</label>
+                    <textarea
+                        placeholder="Type width"
+                        className="form-control"
+                 
+                        id="product_title"
+                      
+                        value={size}
+                        onChange={(e) => setSize(e.target.value)}
+                    ></textarea>
+                  </div>
+
                   {/** 
                   <div className="mb-4">
                     <label className="form-label">Branch</label>

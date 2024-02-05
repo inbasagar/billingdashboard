@@ -48,6 +48,8 @@ import OrderDetailScreen_annanagar from "./screens/OrderDetailScreen_annanagar";
 import { listProductsannanagar } from "./Redux/Actions/ProductActionsanna";
 import NewOrder_tnagar from "./screens/newOrder_tnagar";
 import AddOrderedProduct_tnagar from "./screens/AddOrderedProduct_tnagar.js";
+import newarrivalsScreen_tnagar from "./screens/newarrivalsScreen_tnagar.js";
+import AddEmployee from "./screens/AddEmployee.js";
 
 
 
@@ -79,7 +81,7 @@ function App() {
       <Router>
         <Switch>
           <PrivateRouter path="/" component={HomeScreen} exact />
-          <Route path="/search/:keyword" component={OrderDetailScreen} exact />
+         
           <Route 
             path="/search/:keyword/page/:pagenumber"
             component={ProductScreen}
@@ -89,11 +91,24 @@ function App() {
           
           <PrivateRouter path="/page/:pagenumber" component={ProductScreen} />
           <PrivateRouter path="/paget/:pagenumber" component={ProductScreen_tnagar} />
+          <PrivateRouter
+            path="/search/:keyword/paget/:pagenumber"
+            component={ProductScreen_tnagar}
+            exact
+          />
 
           <PrivateRouter path="/pagea/:pagenumber" component={ProductScreen_annanagar} />
           <PrivateRouter path="/pageot/:pagenumber" component={NewOrder_tnagar} />
           <PrivateRouter path="/products" component={ProductScreen} />
           <PrivateRouter path="/productst/" component={ProductScreen_tnagar} />
+          <PrivateRouter path="/newarrivalst/" component={newarrivalsScreen_tnagar} />
+          <PrivateRouter path="/search/:keyword" component={newarrivalsScreen_tnagar} />
+          <PrivateRouter path="/pagearrivalst/:pagenumber" component={newarrivalsScreen_tnagar} />
+          <PrivateRouter
+            path="/search/:keyword/pagearrivalst/:pagenumber"
+            component={newarrivalsScreen_tnagar}
+            exact
+          />
           <PrivateRouter path="/productsanna/" component={ProductScreen_annanagar} />
           <PrivateRouter path="/products/annanagar" component={ProductScreen_adayar} />
           <PrivateRouter path="/neworders/" component={NewOrder_tnagar} />
@@ -109,7 +124,7 @@ function App() {
           <PrivateRouter path="/addorder" component={AddOrderedProduct_tnagar} />
 
           <PrivateRouter path="/adduser" component={AddUser} />
-
+          <PrivateRouter path="/addEmployee" component={AddEmployee} />
           <PrivateRouter path="/users" component={UsersScreen_tnagar} />
         
           <PrivateRouter path="/customers/" component={UsersScreen} />

@@ -22,7 +22,8 @@ import {
     ORDER_MARK_PAID_SUCCESS,
     ORDER_MARK_TOBETAKEN_REQUEST,
     ORDER_MARK_TOBETAKEN_SUCCESS,
-    ORDER_MARK_TOBETAKEN_FAIL
+    ORDER_MARK_TOBETAKEN_FAIL,
+
    
   } from "../Constants/OrderConstants";
   
@@ -112,7 +113,7 @@ import { PRODUCT_EDIT_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PROD
     
     const { data } = await Axios.post(`/api/orders`, order, config);
   
-  
+      
       // Update product counts for each item in the order before creating the order
     
       for (const orderItem of order.orderItems) {
@@ -152,6 +153,7 @@ import { PRODUCT_EDIT_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PROD
        
         dispatch({ type: ORDER_CREATE_SUCCESS, payload: data });
         dispatch({ type: CART_CLEAR_ITEMS, payload: data });
+
     
         localStorage.removeItem("cartItems");
         
@@ -169,11 +171,11 @@ import { PRODUCT_EDIT_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PROD
       });
     }
   };
-  
+
   export const createOrder_tnagar = (order) => async (dispatch, getState) => {
     try {
       dispatch({ type: ORDER_CREATE_REQUEST });
-  
+   
       const {
         userLogin: { userInfo },
       } = getState();
@@ -209,12 +211,12 @@ import { PRODUCT_EDIT_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PROD
       // Update product counts for each item in the order before creating the order
     
     
-       
         dispatch({ type: ORDER_CREATE_SUCCESS, payload: data });
         dispatch({ type: CART_CLEAR_ITEMS, payload: data });
-    
+
         localStorage.removeItem("cartItems");
-        
+         // Return the created order data, including the assigned code
+    return data;
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -227,6 +229,8 @@ import { PRODUCT_EDIT_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PROD
         type: ORDER_CREATE_FAIL,
         payload: message,
       });
+          // Return an error or null, depending on your needs
+    return null;
     }
   };
   {/** 
@@ -467,44 +471,7 @@ import { PRODUCT_EDIT_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PROD
     }
   };
   
-  export const markItemAsDelivered = (orderId, itemId) => async (dispatch, getState) => {
-    try {
-      dispatch({ type: ORDER_MARK_DELIVERED_REQUEST });
-      const {
-        userLogin: { userInfo },
-      } = getState();
-  
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-  
-      // Perform the API call to mark the item as delivered (you may need to implement this API endpoint)
-      const { data } = await Axios.put(
-        `/api/orderst/${orderId}/isproductdelivered`, // Corrected URL with orderId only
-        
-        { itemId }, // Pass itemId in the request body if needed
-        
-        config
-      );
-
-      dispatch({ type: ORDER_MARK_DELIVERED_SUCCESS, payload: data });
-    } 
-    catch (error) {
-      const message =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      if (message === "Not authorized, token failed") {
-        dispatch(logout());
-      }
-      dispatch({
-        type: ORDER_MARK_DELIVERED_FAIL,
-        payload: message,
-      });
-    }
-  };
+ 
   export const updatependingcash_tnagar = (
     orderId,
 pendingcash,
@@ -647,6 +614,45 @@ pendingbankacct
       });
     }
   };
+  export const markItemAsDelivered = (orderId, itemId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: ORDER_MARK_DELIVERED_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+  
+      // Perform the API call to mark the item as delivered (you may need to implement this API endpoint)
+      const { data } = await Axios.put(
+        `/api/orderst/${orderId}/isproductdelivered`, // Corrected URL with orderId only
+        
+        { itemId }, // Pass itemId in the request body if needed
+        
+        config
+      );
+      console.log(itemId);
+
+      dispatch({ type: ORDER_MARK_DELIVERED_SUCCESS, payload: data });
+    } 
+    catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(logout());
+      }
+      dispatch({
+        type: ORDER_MARK_DELIVERED_FAIL,
+        payload: message,
+      });
+    }
+  };
   export const markItemAstobetaken = (orderId, itemId) => async (dispatch, getState) => {
     try {
       dispatch({ type: ORDER_MARK_TOBETAKEN_REQUEST });
@@ -668,6 +674,7 @@ pendingbankacct
         
         config
       );
+      console.log(itemId);
       dispatch({ type: ORDER_MARK_TOBETAKEN_SUCCESS, payload: data });
     } catch (error) {
       dispatch({

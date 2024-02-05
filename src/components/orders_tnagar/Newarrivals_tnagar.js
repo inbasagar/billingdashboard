@@ -5,8 +5,9 @@ import { deleteProduct } from "../../Redux/Actions/ProductActions";
 import { addToCart, addToCartTnagar, removefromcart } from "../../Redux/Actions/cartActions";
 import { useState } from "react";
 import { listProductDetails } from "../../Redux/Actions/ProductActions";
-import { deleteProducttnagar, listProductDetailstnagar } from "../../Redux/Actions/ProductActionst";
-const Product_tnagar = (props) => {
+import { deleteProducttnagar, listNewarrivalsDetailstnagar, listProductDetailstnagar } from "../../Redux/Actions/ProductActionst";
+
+const Newarrivals_tnagar = (props) => {
   const { product } = props;
  
   let history = useHistory();
@@ -19,14 +20,18 @@ const Product_tnagar = (props) => {
   //
 const [qty, setQty] = useState(1);
   //const total = cartItems.reduce((a, i) => a + i.qty * i.price, 0).toFixed(2);
-  const AddToCartHandle = (e) => {
-    //const history = useHistory();
-    e.preventDefault();
-   
-    //history.push(`/cartt/${product._id}?qty=${qty}`);
-    dispatch(addToCartTnagar(product._id, qty));
-  };
+  useEffect(()=>
+  {
+    dispatch(listNewarrivalsDetailstnagar(product._id));
+  }, [dispatch,product.id]);
 
+
+  const deletehandler = (id) => {
+    if (window.confirm("Are you sure??")) {
+      dispatch(deleteProducttnagar(id));
+    }
+  };
+ 
 {/*}
   useEffect(() => {
     if (product._id) {
@@ -36,17 +41,9 @@ const [qty, setQty] = useState(1);
     }
   }, [dispatch, product.id, 1]); */}
   
-  useEffect(()=>
-  {
-    dispatch(listProductDetailstnagar(product._id));
-  }, [dispatch,product.id]);
 
 
-  const deletehandler = (id) => {
-    if (window.confirm("Are you sure??")) {
-      dispatch(deleteProducttnagar(id));
-    }
-  };
+
  
 
   return (
@@ -68,11 +65,14 @@ const [qty, setQty] = useState(1);
 
           
           <th style={{ width: "10%" }} scope="col">Availability</th>
-          <th style={{ width: "10%" }} scope="col" className="">
-            Add to Cart
-          </th>
+
         
-          
+          {userInfo && userInfo.isOwner !== false && (
+              <>
+            <th style={{ width: "10%" }} scope="col">Edit</th>
+            <th style={{ width: "10%" }} scope="col">Delete</th>
+            </>
+          )}
             {userInfo && userInfo.isOwner !== false && (
               <>
             <th style={{ width: "10%" }} scope="col">Edit</th>
@@ -88,27 +88,10 @@ const [qty, setQty] = useState(1);
         <td>
             <b>{product.name}</b>
         </td>
-        <td>{product.code}</td>
+        <td>{product.product_code}</td>
         <td>{product.size} </td>
         <td>{product.countInStock}</td>
-        <td>
-          {product.countInStock > 0 ? 
-          (
-          <>
-                          
-                            
-            <select value={qty} onChange={(e) => setQty(e.target.value)}>
-              {[...Array(product.countInStock).keys()].map(
-                (x) => (
-                <option key={x+1} value={x+1}>{x + 1}
-                </option>
-                                )
-              )}
-            </select>
-                         
-          </>
-          ) : null}
-        </td>
+
         <td>{product.price}</td>
 
 
@@ -117,28 +100,13 @@ const [qty, setQty] = useState(1);
 
 
         <td>{product.isavailability}</td>
-        <td>
-              {product.countInStock > 0 ? 
-              (
-                
-                  <Link
-                    to="#"
-                    onClick={AddToCartHandle}
-                    className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
-                  >
-                    <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                  </Link>
-                
-              ) : null}
-                      
-        </td>
         {userInfo && userInfo.isOwner === true &&
         (
         <>
         <td>
             
               <Link
-                to={`/productt/${product._id}/edit`}
+                to={`/newarrivalst/${product._id}/edit`}
                 className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
               >
                 <i className="fas fa-pen"></i>
@@ -156,7 +124,6 @@ const [qty, setQty] = useState(1);
         </td>
         </>
         )}
-      
 
         {/* Not paid Not delivered */}
         {/* <tr>
@@ -187,4 +154,4 @@ const [qty, setQty] = useState(1);
   );
 };
 
-export default Product_tnagar;
+export default Newarrivals_tnagar;

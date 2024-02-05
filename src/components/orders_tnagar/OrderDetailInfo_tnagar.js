@@ -14,7 +14,9 @@ const OrderDetailInfo_tnagar = (props) => {
             <p className="mb-1">
               {order.shippingAddress.name} <br />
               <a href={`mailto:${order.shippingAddress.email}`}>{order.shippingAddress.email}</a> <br/>
-              <a >{order.shippingAddress.phone}</a>
+              <a >{order.shippingAddress.phone}</a><br/>
+              
+              
             </p>
           </div>
         </article>

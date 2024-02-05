@@ -23,7 +23,7 @@ const AddUserMain = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [postalCode, setPostalCode] = useState();
-
+const[ gstno,setGSTNO]=useState("");
 
   {/*}
   const [price_11X11,setPrice11X11]=useState(0);
@@ -47,6 +47,8 @@ const AddUserMain = () => {
       setCity("");
       setCountry("");
       setPostalCode();
+      setGSTNO("");
+     
 
       {/** 
       setPrice11X11(0);
@@ -58,7 +60,7 @@ const AddUserMain = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createCustomer(name,email,phone,address,city,country,postalCode));
+    dispatch(createCustomer(name,email,phone,address,city,country,postalCode,gstno));
   };
 
   return (
@@ -180,6 +182,20 @@ const AddUserMain = () => {
                       required
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="product_title" className="form-label">
+                    GST NO
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="product_title"
+                      
+                      value={gstno}
+                      onChange={(e) => setGSTNO(e.target.value)}
                     />
                   </div>
                 </div>

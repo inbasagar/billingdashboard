@@ -146,16 +146,19 @@ function base64StringToBlob(base64String, mimeType) {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { loading, error, order } = orderDetails;
 
-  const orderDeliver = useSelector((state) => state.orderDeliver);
-  const { loading: loadingDelivered, success: successDelivered } = orderDeliver;
+ // const orderDeliver = useSelector((state) => state.orderDeliver);
+ // const { loading: loadingDelivered, success: successDelivered } = orderDeliver;
 
-
+  const orderMarkDelivered = useSelector((state) => state.orderMarkDelivered) ; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
+  const { loading: loadingisproductDelivered,success: successproductdelivered } = orderMarkDelivered;
+  const orderMarkTobetaken = useSelector((state) => state.orderMarkTobetaken) ; //By using || {}, you ensure that if orderMarkDelivered is undefined, it will default to an empty object. Then, you can destructure loading with a default value of false.
+  const { loading: loadingisproducttobetaken,success: successproducttobetaken } = orderMarkTobetaken;
   const orderpaid = useSelector((state) => state.orderpaid);
   const { loading: loadingPay, success: successPay } = orderpaid;
   
   useEffect(() => {
     dispatch(getOrderDetails_tnagar(orderId));
-  }, [dispatch, orderId, successDelivered,successPay]);
+  }, [dispatch, orderId, successproducttobetaken,successproductdelivered,successPay]);
  /* useEffect(() => {
     
     if (!order || successPay) {
@@ -183,7 +186,7 @@ function base64StringToBlob(base64String, mimeType) {
   return (
     <section className="content-main">
       <div className="content-header">
-        <Link to="/orders" className="btn btn-dark text-white">
+        <Link to="/orderst" className="btn btn-dark text-white">
           Back To Orders
         </Link>
       </div>
@@ -205,11 +208,15 @@ function base64StringToBlob(base64String, mimeType) {
                 </span>
                 <br />
                 <small className="text-white mx-3 ">
-                  Invoice Number: 
+                  Invoice Number: {order.code}
                 </small>
                 <small className="text-white mx-3 ">
                  Billed By: {order.followedby.name}
                 </small>
+                <small className="text-white mx-3 ">
+                GST No : {order.shippingAddress.GSTNO}
+                </small>
+                
               </div>
               <div className="col-lg-6 col-md-6 ms-auto d-flex justify-content-end align-items-center">
                 <select

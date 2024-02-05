@@ -97,13 +97,13 @@ const BillingDetailMain = (props) => {
     <div class="customer-invoice-section">
       <div class="customer-details">
         <p><strong>Customer Details:</strong></p>
-        <p>Name: Customer Name</p>
+        <p>Name: {order.shippingAddress.name}</p>
         <p>Email: customer@example.com</p>
         <p>Phone: xxx-xxx-xxxx</p>
       </div>
       <div class="invoice-details">
         <p><strong>Invoice Details:</strong></p>
-        <p>Invoice Number: #123456</p>
+        <p>{order.code}</p>
         <p>Date: January 1, 2023</p>
         <p>Due Date: January 15, 2023</p>
       </div>

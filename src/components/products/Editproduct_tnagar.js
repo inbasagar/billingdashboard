@@ -10,7 +10,7 @@ import { PRODUCT_UPDATE_RESET } from "../../Redux/Constants/ProductConstants";
 import { toast } from "react-toastify";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { editProducttnagar, updateProducttnagar } from "../../Redux/Actions/ProductActionst";
+import { createNewarrivaltnagar, editProducttnagar, updateProducttnagar } from "../../Redux/Actions/ProductActionst";
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -29,6 +29,8 @@ const EditProductMain_tnagar = (props) => {
   const [description, setDescription] = useState("");
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState("");
+  const[size,setSize]=useState("");
+  const[code,setCode]=useState("");
   {/** 
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);  
@@ -48,6 +50,9 @@ const EditProductMain_tnagar = (props) => {
     error: errorUpdate,
     success: successUpdate,
   } = productUpdate;
+  const increaseCountInStock = () => {
+    setCountInStock((prevCount) => prevCount + 1);
+  };
 
   useEffect(() => {
     if (successUpdate) {
@@ -64,6 +69,8 @@ const EditProductMain_tnagar = (props) => {
         setPrice(product.price);
         setHeight(product.height);
         setWidth(product.width);
+        setSize(product.size);
+        setCode(product.code);
         {/** 
         setPrice11X11(product.price_11X11);
         setPrice15X12(product.price_15X12);
@@ -87,9 +94,17 @@ const EditProductMain_tnagar = (props) => {
         countInStock,
         height,
         width,
+        size,
+      
 
       })
     );
+    const increasedCount = countInStock - product.countInStock;
+    if (increasedCount > 0) {
+     
+      dispatch(createNewarrivaltnagar(name, price, description, image, increasedCount,code,size,"new arrivals","tnagar"));
+    }
+   
   };
 
   return (
@@ -108,7 +123,13 @@ const EditProductMain_tnagar = (props) => {
               </button>
             </div>
           </div>
-
+          <div>
+              {/* Button to increase countInStock */}
+              <button type="button" className="btn btn-success" onClick={increaseCountInStock}>
+                Increase Count
+              </button>
+            </div>
+         
           <div className="row mb-4">
             <div className="col-xl-8 col-lg-8">
               <div className="card mb-4 shadow-sm">
@@ -172,7 +193,7 @@ const EditProductMain_tnagar = (props) => {
                           placeholder="Type Height"
                           className="form-control"
                           type="number"
-                          required
+                          
                           value={height}
                           onChange={(e) => setHeight(e.target.value)}
                         ></textarea>
@@ -183,9 +204,32 @@ const EditProductMain_tnagar = (props) => {
                           placeholder="Type width"
                           className="form-control"
                           type="number"
-                          required
+                          
                           value={width}
                           onChange={(e) => setWidth(e.target.value)}
+                        ></textarea>
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">Size</label>
+                        <textarea
+                          placeholder="Type width"
+                          className="form-control"
+                          type="text"
+                          
+                          value={size}
+                          onChange={(e) => setSize(e.target.value)}
+                        ></textarea>
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">Product Code</label>
+                        <textarea
+                          placeholder="Type width"
+                          className="form-control"
+                          type="text"
+                          
+                          value={code}
+                          onChange={(e) => setCode(e.target.value)}
+                          readOnly
                         ></textarea>
                       </div>
                       {/** 
