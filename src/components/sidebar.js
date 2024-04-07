@@ -59,7 +59,7 @@ const Sidebar = () => {
       to="/productst/all"
     >
       <i className="icon fas fa-shopping-bag"></i>
-      <span className="text">T.NAGAR</span>
+      <span className="text">Hyderabad</span>
     </NavLink>
   </li>
 )}
@@ -144,7 +144,7 @@ const Sidebar = () => {
                   (userInfo.isAdmin === true && userInfo.branch === "tnagar")) && (
                   <Link className="dropdown-item" to="/orderst/all">
                 
-                  <span className="text">T.Nagar Bills</span>
+                  <span className="text">Hyderabad Bills</span>
                   </Link>
                 )}
                 {((userInfo.isOwner === true) ||

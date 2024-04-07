@@ -223,7 +223,7 @@ const AddOrderedProductMain = () => {
 
               
               <button type="submit" className="btn btn-primary mb-2" name="addToTnagar">
-                Add to T.Nagar
+                Add to Hyderabad
               </button>
 
             </div>
