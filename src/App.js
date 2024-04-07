@@ -51,6 +51,7 @@ import AddOrderedProduct_tnagar from "./screens/AddOrderedProduct_tnagar.js";
 import newarrivalsScreen_tnagar from "./screens/newarrivalsScreen_tnagar.js";
 import AddEmployee from "./screens/AddEmployee.js";
 import UsersEditScreen_tnagar from "./screens/UserEditScreen_tnagar.js";
+import SalesExpenseScreen_hyd from "./screens/SalesExpenseScreen_hyd.js";
 
 
 
@@ -169,6 +170,7 @@ function App() {
           <PrivateRouter path ="/placeorder" component={PlaceOrderScreen}/>
           <PrivateRouter path ="/placeordert" component={PlaceOrderScreen_tnagar}/>
           <PrivateRouter path ="/placeorderanna" component={PlaceOrderScreen_annanagar}/>
+          <PrivateRouter path ="/esthyd" component={SalesExpenseScreen_hyd}/>
           <Route path="/login" component={Login} />
           <PrivateRouter path="*" component={NotFound} />
         </Switch>

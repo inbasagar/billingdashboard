@@ -12,7 +12,7 @@ const Sidebar = () => {
         <div className="aside-top">
           <Link to="/" className="brand-wrap">
             <img
-              src="/images/"
+              src="/images/Balaji_logo.jpeg" 
               style={{ height: "46" }}
               className="logo"
               alt=""
@@ -27,6 +27,7 @@ const Sidebar = () => {
 
         <nav>
           <ul className="menu-aside">
+            {/**
             <li className="menu-item">
               <NavLink
                 activeClassName="active"
@@ -38,6 +39,7 @@ const Sidebar = () => {
                 <span className="text">Dashboard</span>
               </NavLink>
             </li>
+             */}
             {userInfo && (userInfo.isOwner===true)&&(
             <li className="menu-item">
               <NavLink
@@ -183,7 +185,46 @@ const Sidebar = () => {
               </NavLink>
             </li>
             )}
-
+            {userInfo && userInfo.isAdmin !== false && (
+            <li className="menu-item">
+              <NavLink
+                activeClassName="active"
+                className="menu-link"
+                to="/newarrivalst/"
+              >
+                <i class="icon fa fa-arrows-v" ></i>
+                <span className="text">New Arrivals Hyd</span>
+              </NavLink>
+            </li>
+            )}
+                    {userInfo && (
+            <li className="nav-item dropdown">
+              <Link
+                className="nav-link dropdown-toggle"
+                to="#"
+                id="navbarDropdownBills"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span className="text">Sales/Expense</span>
+              </Link>
+              <div
+                className="dropdown-menu"
+                aria-labelledby="navbarDropdownBills"
+              >
+                {((userInfo.isOwner === true) ||
+                  (userInfo.isAdmin === true && userInfo.branch === "tnagar")) && (
+                  <Link className="dropdown-item" to="/esthyd/all">
+                
+                  <span className="text">Hyderabad</span>
+                  </Link>
+                )}
+                {/* Add more links for other branches if needed */}
+              </div>
+            </li>
+          )}
     
           </ul>
           <br />

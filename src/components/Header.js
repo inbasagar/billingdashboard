@@ -92,6 +92,7 @@ const Header = () => {
             </Link>        
           </li> 
           )}
+          {/** 
                     {userInfo && ((userInfo.isOwner === true) || (userInfo.isAdmin === true && userInfo.branch === "annanagar"))&&(
           <li class="nav-item">
             <Link className="nav-link btn-icon" to="/carta">
@@ -100,22 +101,24 @@ const Header = () => {
             </Link>        
           </li> 
           )}
-
+                    */}
           <li className="nav-item">
             <Link className="nav-link btn-icon" to="#">
               <i className="fas fa-bell"></i>
             </Link>
           </li>
+          {/** 
           <li className="nav-item">
             <Link className="nav-link" to="#">
               English
             </Link>
           </li>
+                  */}
           <li className="dropdown nav-item">
             <Link className="dropdown-toggle" data-bs-toggle="dropdown" to="#">
               <img
                 className="img-xs rounded-circle"
-                src="/images/"
+                src="/images/Balaji_logo.jpeg" 
                 alt="User"
               />
             </Link>
@@ -123,9 +126,11 @@ const Header = () => {
               <Link className="dropdown-item" to="/">
                 My profile
               </Link>
+              {/** 
               <Link className="dropdown-item" to="#">
                 Settings
               </Link>
+                  */}
               <Link
                 onClick={logoutHandler}
                 className="dropdown-item text-danger"
