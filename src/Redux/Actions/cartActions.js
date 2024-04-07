@@ -58,6 +58,7 @@ export const addToCartTnagar = (id, qty) => async (dispatch, getState) => {
       image: data.image,
       price: data.price,
       countInStock: data.countInStock,
+      size:data.size,
       qty,
       height: data.height,
       width: data.width,

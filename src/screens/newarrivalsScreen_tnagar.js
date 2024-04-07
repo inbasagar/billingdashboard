@@ -7,6 +7,7 @@ import MainProducts_tnagar from "../components/products/MainProducts_tnagar";
 import AddProductMain from './../components/products/AddProductMain';
 import NewarrivalsMain_tnagar from "../components/orders_tnagar/NewarrivalsMain_tnagar";
 import Pagination_tnagar from "../components/products/paginationt";
+import Paginationarrivals_tnagar from "../components/products/paginationarrivalst";
 const newarrivalsScreen_tnagar = ({match}) => {
   
   const keyword = match.params.keyword;
@@ -18,7 +19,7 @@ const newarrivalsScreen_tnagar = ({match}) => {
         <Header />
         <NewarrivalsMain_tnagar keyword={keyword} pagenumber={pagenumber}/>
       
-        <Pagination_tnagar/>
+        <Paginationarrivals_tnagar/>
       </main>
     </>
   );

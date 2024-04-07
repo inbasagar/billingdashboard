@@ -15,6 +15,7 @@ import {
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import moment from "moment";
+import { saveShippingAddress } from './../../Redux/Actions/cartActions';
 
 const BillingDetailMain = (props) => {
   const componentRef = useRef();
@@ -39,6 +40,8 @@ const BillingDetailMain = (props) => {
   useEffect(() => {
     dispatch(getBillDetails_tnagar(billId));
   }, [dispatch, billId, successDelivered,successPay]);
+
+  //console.log(order.followedby.name);
  /* useEffect(() => {
     
     if (!order || successPay) {
@@ -58,125 +61,137 @@ const BillingDetailMain = (props) => {
     dispatch(paidOrder(order));
     //dispatch(payOrder(orderId));
   };
-
-
   const downloadPDF = () => {
     const input = componentRef.current;
     if (input) {
-      html2pdf().from(input).save(`Invoice ${order._id}.pdf`);
+      html2pdf().from(input).toPdf().get('pdf').then(function (pdf) {
+        // Open the browser's print dialog
+        pdf.autoPrint();
+  
+        // Save and print the PDF
+        pdf.save(`Invoice ${order.code}.pdf`);
+      });
     } else {
       console.error("Component reference not found.");
     }
   };
+
+  {/*const downloadPDF = () => {
+    const input = componentRef.current;
+    if (input) {
+      html2pdf().from(input).save(`Invoice ${order.code}.pdf`);
+    } else {
+      console.error("Component reference not found.");
+    }
+  };*/}
   return (
-    <section className="content-main" >
-      <div className="content-header">
-        <Link to="/orders" className="btn btn-dark text-white">
-          Back To Orders
-        </Link>
-      </div>
+<section className="content-main">
+  <div className="content-header">
 
-      {loading ? (
-        <Loading />
-      ) : error ? (
-        <Message variant="alert-danger">{error}</Message>
-      ) : (
-        <div className="card" >
-  <div class="invoice"  ref={componentRef}>
-    <div class="logo-section">
-      <div class="logo">
-        
-      </div>
-      <div class="shop-details">
-        <p>Your Shop Name</p>
-        <p>Shop Address, City, Country</p>
-        <p>Contact: xxx-xxx-xxxx</p>
-      </div>
-    </div>
-
-    <div class="customer-invoice-section">
-      <div class="customer-details">
-        <p><strong>Customer Details:</strong></p>
-        <p>Name: {order.shippingAddress.name}</p>
-        <p>Email: customer@example.com</p>
-        <p>Phone: xxx-xxx-xxxx</p>
-      </div>
-      <div class="invoice-details">
-        <p><strong>Invoice Details:</strong></p>
-        <p>{order.code}</p>
-        <p>Date: January 1, 2023</p>
-        <p>Due Date: January 15, 2023</p>
-      </div>
-    </div>
-
-    <table class="invoice-table">
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Quantity</th>
-          <th>Unit Price</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Product 1</td>
-          <td>2</td>
-          <td>$50.00</td>
-          <td>$100.00</td>
-        </tr>
-        <tr>
-          <td>Product 2</td>
-          <td>1</td>
-          <td>$30.00</td>
-          <td>$30.00</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="invoice-total">
-      <p><strong>Subtotal:</strong> $130.00</p>
-      <p><strong>Tax (10%):</strong> $13.00</p>
-      <p><strong>Total:</strong> $143.00</p>
-    </div>
-
-    <div class="notes-signature-section">
-      <div class="notes">
-        <p>Notes:</p>
-        <p>Thank you for your business!</p>
-      </div>
-      <div class="signature">
-        <p>_________________________</p>
-        <p>Your Signature</p>
-      </div>
-    </div>
+    <Link to={`/ordert/${order._id}`} className="btn btn-dark text-white">
+    Back To Bills
+  </Link>
   </div>
 
-          <div className="card-body">
-            {/* ... (other body content) */}
-
-    
-
-              {/* Include the bill template here */}
-              <div className="col-lg-12 mt-4" >
-                <div className="box shadow-sm bg-light">
-                  {/* Add a button to download the PDF */}
-                  <button className="btn btn-success col-12" onClick={downloadPDF}>
-                    Download PDF
-                  </button>
-
-                  {/* Include the HTML bill template here */}
-                  <div className="bill-container">
-                    {/* ... (HTML bill template content) */}
-                  </div>
-                </div>
-              </div>
-          
+  {loading ? (
+    <Loading />
+  ) : error ? (
+    <Message variant="alert-danger">{error}</Message>
+  ) : (
+    <div className="card">
+      <div className="invoice" ref={componentRef}>
+        <div className="logo-section">
+          <div className="logo">
+            <img src="/images/Balaji_logo.jpeg" alt="Logo" width="100%" />
           </div>
-
+          <div className="shop-details">
+            <p><strong>Hyderabad Branch</strong></p>
+            <p><strong>Phone:</strong> 9894225555</p>
+            <p><strong>Address:</strong> H.No.2-52/1/1, Pillar No.1727, HItech city main road, Madhapur, Hyderabad- 81</p>
+            <p><strong>Website:</strong> www.balajitanjoreartgallery.com</p>
+            <p><strong>Tollfree Number:</strong> +91 6383884488</p>
+          </div>
         </div>
-      )}
-    </section>
+
+        <div className="customer-invoice-section">
+          <div className="customer-details">
+            <p><strong>Bill To:</strong></p>
+            <p>{order.shippingAddress.name}</p>
+            <p>{order.shippingAddress.phone}</p>
+            <p>{order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalcode}, {order.shippingAddress.country}</p>
+          </div>
+          <div className="invoice-details">
+            <p><strong>Invoice Details:</strong></p>
+            <p><strong>Invoice Number: </strong>{order.code}</p>
+            <p><strong>Invoice Date:</strong> {moment(order.createdAt).format("MMM Do YY")}</p>
+            {order.orderItems.every(item => item.isproductdelivered) ? (
+              <p><strong>Delivery Date:</strong> {moment(order.isproductdelivered).format("MMM Do YY")}</p>
+            ) : (
+              <p><strong>Delivery Date: </strong>To be delivered</p>
+            )}
+          </div>
+        </div>
+
+        <table className="invoice-table">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Size</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {order.orderItems.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <Link className="itemside" to="#">
+                    <div className="info">{item.name}</div>
+                  </Link>
+                </td>
+                <td>{item.size}</td> {/**size update */}
+                <td>{item.qty}</td>
+                <td className="text-end">₹{item.qty * item.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="invoice-total">
+          <p><strong>Subtotal:</strong> ₹{order.totalPrice - order.taxPrice}</p>
+          <p><strong>GST:</strong> ₹{order.taxPrice}</p>
+          <p><strong>Discount:</strong> ₹{order.orderdiscount}</p>
+          <p><strong>Grand Total:</strong> ₹{order.grandtotal}</p>
+        </div>
+
+        <div className="notes-signature-section">
+          <div className="notes">
+            <p><strong>Notes:</strong></p>
+            <p>{order.Notes}</p>
+          </div>
+          <div className="signature">
+           <p><strong>Followed By:</strong> {order.followedby.name}</p>
+           
+
+          </div>
+        </div>
+      </div>
+
+      <div className="card-body">
+        <div className="col-lg-12 mt-4">
+          <div className="box shadow-sm bg-light">
+            <button className="btn btn-success col-12" onClick={downloadPDF}>
+              Download PDF
+            </button>
+            <div className="bill-container">
+              {/* ... (HTML bill template content) */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</section>
   );
 };
 

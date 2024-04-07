@@ -250,7 +250,7 @@ function base64StringToBlob(base64String, mimeType) {
           <th style={{ width: "20%" }} className="text-end">
             Delivery status
           </th>
-          <th style={{ width: "20%" }} className="text-end">
+          <th style={{ width: "10%" }} className="text-end">
             Delivery status option
           </th>
         </tr>

@@ -50,6 +50,7 @@ import NewOrder_tnagar from "./screens/newOrder_tnagar";
 import AddOrderedProduct_tnagar from "./screens/AddOrderedProduct_tnagar.js";
 import newarrivalsScreen_tnagar from "./screens/newarrivalsScreen_tnagar.js";
 import AddEmployee from "./screens/AddEmployee.js";
+import UsersEditScreen_tnagar from "./screens/UserEditScreen_tnagar.js";
 
 
 
@@ -112,6 +113,11 @@ function App() {
           <PrivateRouter path="/productsanna/" component={ProductScreen_annanagar} />
           <PrivateRouter path="/products/annanagar" component={ProductScreen_adayar} />
           <PrivateRouter path="/neworders/" component={NewOrder_tnagar} />
+          <PrivateRouter
+            path="/search/:keyword/pageot/:pagenumber"
+            component={NewOrder_tnagar}
+            exact
+          />
           <PrivateRouter path="/category" component={CategoriesScreen} />
           <PrivateRouter path="/orders" component={OrderScreen} />
           <PrivateRouter path="/orderst" component={OrderScreen_tnagar} />
@@ -147,6 +153,10 @@ function App() {
             path="/customer/:id/edit"
             component={UserEditScreen}
           />
+          <PrivateRouter
+            path="/user/:id/edit"
+            component={UsersEditScreen_tnagar}
+          />          
           <Route path="/cart/:id?" component={CartScreen} />
           <Route path="/cartt/:id?" component={CartScreenTnagar} />
           <Route path="/carta/:id?" component={CartScreenAnnanagar} />

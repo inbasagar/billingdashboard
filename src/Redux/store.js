@@ -49,6 +49,11 @@ const reducer = combineReducers({
   customerEdit: customerEditReducer,
   customerUpdate: customerUpdateReducer,
   customerDelete:customerDeleteReducer,
+  userCreate:userCreateReducer,
+  userList:userListReducer,
+  userDelete:userDeleteReducer,
+  userEdit: userEditReducer,
+  userUpdate: userUpdateReducer,
   cart: cartReducer,
   newarrivals:newarrivalsListReducer,
 

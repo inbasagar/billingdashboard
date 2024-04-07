@@ -52,7 +52,7 @@ return (
     <section className="content-main">
       <div className="content-header">
         <h2 className="content-title">Orders</h2>
-        {userInfo && (userInfo.isOwner === true)&&(
+        {userInfo && (userInfo.isAdmin === true)&&(
          <div>
           <Link to="/addorder" className="btn btn-primary">
             Create new

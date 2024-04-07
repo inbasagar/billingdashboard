@@ -50,8 +50,8 @@ const Sidebar = () => {
               </NavLink>
             </li>
             )}
+            {userInfo && ((userInfo.isOwner==true)||((userInfo.isAdmin === true)&&(userInfo.branch=='tnagar')))&&(
             
-            {userInfo && ((userInfo.isOwner === true || (userInfo.isAdmin === true && userInfo.branch === "tnagar")) && (
   <li className="menu-item">
     <NavLink
       activeClassName="active"
@@ -62,7 +62,7 @@ const Sidebar = () => {
       <span className="text">T.NAGAR</span>
     </NavLink>
   </li>
-))}
+)}
                         {userInfo && ((userInfo.isOwner === true) || (userInfo.isAdmin === true && userInfo.branch === "annanagar"))&&(
             <li className="menu-item">
               <NavLink

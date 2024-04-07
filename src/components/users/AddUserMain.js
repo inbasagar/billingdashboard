@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useHistory} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
@@ -24,7 +24,7 @@ const AddUserMain = () => {
   const [country, setCountry] = useState("");
   const [postalCode, setPostalCode] = useState();
 const[ gstno,setGSTNO]=useState("");
-
+let history = useHistory();
   {/*}
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);
@@ -61,6 +61,7 @@ const[ gstno,setGSTNO]=useState("");
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createCustomer(name,email,phone,address,city,country,postalCode,gstno));
+    history.push("/customers/");
   };
 
   return (
@@ -109,7 +110,7 @@ const[ gstno,setGSTNO]=useState("");
                       placeholder="Type here"
                       className="form-control"
                       id="product_title"
-                      required
+                      //required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
@@ -137,7 +138,7 @@ const[ gstno,setGSTNO]=useState("");
                       placeholder="Type here"
                       className="form-control"
                       id="product_title"
-                      required
+                      //required
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                     />
@@ -151,7 +152,7 @@ const[ gstno,setGSTNO]=useState("");
                       placeholder="Type here"
                       className="form-control"
                       id="product_title"
-                      required
+                      //required
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                     />
@@ -165,7 +166,7 @@ const[ gstno,setGSTNO]=useState("");
                       placeholder="Type here"
                       className="form-control"
                       id="product_title"
-                      required
+                      //required
                       value={postalCode}
                       onChange={(e) => setPostalCode(e.target.value)}
                     />
@@ -179,7 +180,7 @@ const[ gstno,setGSTNO]=useState("");
                       placeholder="Type here"
                       className="form-control"
                       id="product_title"
-                      required
+                      //required
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
                     />

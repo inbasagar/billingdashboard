@@ -212,6 +212,7 @@ function base64StringToBlob(base64String, mimeType) {
                 </small>
                 <small className="text-white mx-3 ">
                  Billed By: {order.followedby.name}
+                 
                 </small>
                 <small className="text-white mx-3 ">
                 GST No : {order.shippingAddress.GSTNO}
@@ -219,7 +220,7 @@ function base64StringToBlob(base64String, mimeType) {
                 
               </div>
               <div className="col-lg-6 col-md-6 ms-auto d-flex justify-content-end align-items-center">
-                <select
+             {/**    <select
                   className="form-select d-inline-block"
                   style={{ maxWidth: "200px" }}
                 >
@@ -229,6 +230,7 @@ function base64StringToBlob(base64String, mimeType) {
                   <option>Shipped</option>
                   <option>Delivered</option>
                 </select>
+      **/}
                 <button  className="btn btn-success ms-2" onClick={generateinvoice}>
                   <i className="fas fa-print"></i>
                 </button>

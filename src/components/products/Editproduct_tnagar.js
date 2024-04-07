@@ -102,7 +102,7 @@ const EditProductMain_tnagar = (props) => {
     const increasedCount = countInStock - product.countInStock;
     if (increasedCount > 0) {
      
-      dispatch(createNewarrivaltnagar(name, price, description, image, increasedCount,code,size,"new arrivals","tnagar"));
+      dispatch(createNewarrivaltnagar(name, price, description, image, increasedCount,countInStock,code,size,"new arrivals","tnagar"));
     }
    
   };
@@ -184,6 +184,7 @@ const EditProductMain_tnagar = (props) => {
                           required
                           value={countInStock}
                           onChange={(e) => setCountInStock(e.target.value)}
+                          readOnly
                         />
                       </div>
 

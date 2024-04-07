@@ -6,10 +6,11 @@ import { addToCart, addToCartTnagar, removefromcart } from "../../Redux/Actions/
 import { useState } from "react";
 import { listProductDetails } from "../../Redux/Actions/ProductActions";
 import { deleteProducttnagar, listNewarrivalsDetailstnagar, listProductDetailstnagar } from "../../Redux/Actions/ProductActionst";
-
+import moment from "moment";
+import "moment-timezone";
 const Newarrivals_tnagar = (props) => {
   const { product } = props;
- 
+  
   let history = useHistory();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userLogin.userInfo);
@@ -31,6 +32,8 @@ const [qty, setQty] = useState(1);
       dispatch(deleteProducttnagar(id));
     }
   };
+  const createdAtIndianTime = moment(product.createdAt).tz("Asia/Kolkata").format("MMM Do YYYY, h:mm:ss A");
+ 
  
 {/*}
   useEffect(() => {
@@ -48,8 +51,51 @@ const [qty, setQty] = useState(1);
 
   return (
     <>
-    
   
+    <table className="table">
+      <thead>
+        <tr>
+
+          <th scope="col">Name</th>
+          <th  scope="col">Product Code</th>
+          
+
+          <th scope="col">Size</th>
+          <th scope="col">Added Stock</th>
+          <th  scope="col">Total Quantity</th>
+          <th  scope="col">Price</th>
+          
+
+          
+          <th  scope="col">Added Date</th>
+
+        </tr>
+      </thead>
+  
+     <tbody>
+
+        <td>
+            <b>{product.name}</b>
+        </td>
+        <td>{product.product_code}</td>
+        <td>{product.size} </td>
+        <td>{product.increasedCount}</td>
+        <td>{product.countInStock}</td>
+       
+        <td>{product.price}</td>
+
+
+
+
+
+
+        <td>{createdAtIndianTime}</td>
+
+      </tbody>
+  
+    </table>
+    
+  {/*
     <table className="table">
       <thead>
         <tr>
@@ -144,11 +190,12 @@ const [qty, setQty] = useState(1);
               <i className="fas fa-eye"></i>
             </Link>
           </td>
-        </tr> */}
+        </tr> *
       </tbody>
     </table>
+    */}
    
-     
+    
     </>
       
   );

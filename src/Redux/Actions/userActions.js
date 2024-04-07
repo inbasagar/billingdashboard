@@ -11,6 +11,18 @@ import {
   USER_REGISTER_SUCCESS,
 USER_REGISTER_REQUEST,
   USER_REGISTER_FAIL,
+  USER_DELETE_FAIL,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_REQUEST,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAIL,
+  USER_EDIT_REQUEST,
+  USER_EDIT_SUCCESS,
+  USER_EDIT_FAIL,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL,
 
 } from "../Constants/UserContants";
 //import axios from "axios";
@@ -125,7 +137,52 @@ export const logout = () => (dispatch) => {
 };
 
 // ALL USER
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DELETE_REQUEST });
 
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await Axios.delete(`/api/users/${id}`, config);
+
+    dispatch({ type: USER_DELETE_SUCCESS });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
+    dispatch({
+      type: USER_DELETE_FAIL,
+      payload: message,
+    });
+  }
+};
+export const listUserDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_DETAILS_REQUEST });
+    const { data } = await Axios.get(`/api/users/${id}`);
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 export const listUser = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
@@ -140,7 +197,7 @@ export const listUser = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await Axios.get(`/api/users`, config);
+    const { data } = await Axios.get(`/api/users/`, config);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -157,4 +214,64 @@ export const listUser = () => async (dispatch, getState) => {
     });
   }
 };
+
+export const editUser = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_EDIT_REQUEST });
+    const { data } = await Axios.get(`/api/users/${id}`);
+    dispatch({ type: USER_EDIT_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
+    dispatch({
+      type: USER_EDIT_FAIL,
+      payload: message,
+    });
+  }
+};
+
+// UPDATE PRODUCT
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UPDATE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await Axios.put(
+      `/api/users/${user._id}`,
+      user,
+      config
+    );
+
+    dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+    dispatch({ type: USER_EDIT_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
+    dispatch({
+      type: USER_UPDATE_FAIL,
+      payload: message,
+    });
+  }
+};
+
 

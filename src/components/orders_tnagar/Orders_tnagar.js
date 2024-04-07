@@ -47,11 +47,11 @@ const Orders_tnagar = (props) => {
             </td>
             
             <td>
-              {order.isDelivered ? (
-                <span className="badge btn-success">Delivered</span>
-              ) : (
-                <span className="badge btn-dark">Not delivered</span>
-              )}
+            {order.orderItems.every(item => item.isproductdelivered) ? (
+               <span className="badge btn-success">Delivered</span>
+            ) : (
+              <span className="badge btn-dark">Not delivered</span>
+            )}
             </td>
             <td>{moment(order.createdAt).format("MMM Do YY")}</td>
             <td className="d-flex justify-content-end align-item-center">

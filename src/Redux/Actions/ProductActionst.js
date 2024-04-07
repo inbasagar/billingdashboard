@@ -74,6 +74,7 @@ import {
       };
   
       const { data } = await Axios.get(`/api/newarrivalst?pageNumber=${pageNumber}&keyword=${keyword}`, config);
+      
   //?pageNumber=${pageNumber}
       dispatch({ type: NEWPRODUCT_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -106,6 +107,7 @@ import {
       };
   
       const { data } = await Axios.get(`/api/productst/ordered?pageNumber=${pageNumber}&keyword=${keyword}`, config);
+      
   //?pageNumber=${pageNumber}
       dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -225,7 +227,7 @@ import {
   };
   
   export const createOrderedProducttnagar =
-    (name, price, description, image, countInStock,height,width,isavailability,branch)=>
+    (name, price, description, image, countInStock,size,isavailability,branch)=>
     async (dispatch, getState) => {
       try {
         dispatch({ type: PRODUCT_CREATE_REQUEST });
@@ -242,7 +244,7 @@ import {
   
         const { data } = await Axios.post(
           `/api/productst/order`,
-          { name, price, description, image, countInStock,height,width,isavailability: "ordered",branch},
+          { name, price, description, image, countInStock,size,isavailability: "ordered",branch},
           config
         );
   
@@ -313,7 +315,7 @@ import {
     };
       // CREATE PRODUCT
       export const createNewarrivaltnagar =
-      (name, price, description, image, countInStock,code,size,isavailability,branch)=>
+      (name, price, description, image, increasedCount,countInStock,code,size,isavailability,branch)=>
       async (dispatch, getState) => {
         try {
           dispatch({ type: NEWPRODUCT_CREATE_REQUEST });
@@ -332,7 +334,7 @@ import {
    
           const { data } = await Axios.post(
             `/api/newarrivalst/`,// product,
-            { name, price, description, image, countInStock,code,size,isavailability,branch},
+            { name, price, description, image,increasedCount, countInStock,code,size,isavailability,branch},
 
      
            

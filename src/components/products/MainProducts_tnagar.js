@@ -118,7 +118,7 @@ return (
 
                         <div className="row">
                         {products
-                          .filter((product) => (userInfo.isOwner ? true : product.count > 0))
+                          .filter((product) => (userInfo.isAdmin ? true : product.count > 0))
                           .map((product) => (
                             <Product_tnagar product={product} key={product._id}>
                               {userInfo.isOwner && product.count === 0 && (

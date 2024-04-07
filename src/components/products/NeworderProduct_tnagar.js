@@ -12,7 +12,7 @@ const NeworderProduct_tnagar = (props) => {
   let history = useHistory();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userLogin.userInfo);
-  console.log(userInfo.isOwner);
+  //console.log(userInfo.isOwner);
   //const [qty, setQty] = useState(1);
   //const cart = useSelector((state) => state.cart);
   //const { cartItems,success,error } = cart;

@@ -207,6 +207,8 @@ const history = useHistory();
 
   const orderpaid = useSelector((state) => state.orderpaid);
   const { loading: loadingPay, success: successPay } = orderpaid;
+
+  
   const deliverHandler = (orderId,itemId) => {
  
       dispatch(markItemAsDelivered(orderId, itemId));
@@ -248,25 +250,50 @@ const history = useHistory();
   };
   const handlependingcash = async (orderId) => {
     console.log(orderId);
-  
-    dispatch(updatependingcash_tnagar(orderId, pendingcashamt));
-    dispatch(updatesalesexpensecashupdate(orderId,pendingcashamt));
-    //history.push(`/ordert/${orderId}`);
+    if((order.pending-pendingbankamt-pendingcashamt-pendingupiamt)>=0)
+    {
+      dispatch(updatependingcash_tnagar(orderId, pendingcashamt));
+      dispatch(updatesalesexpensecashupdate(orderId,pendingcashamt));
+    
+    }
+    else {
+      // Display toast message if entered amount is greater than pending amount
+      toast.error("Entered amount should be less than or equal to pending amount", ToastObjects);
+    }
+      //history.push(`/ordert/${orderId}`);
   };
-
+  useEffect(() => {
+    if (order.pending - pendingbankamt - pendingcashamt - pendingupiamt < 0) {
+      toast.error("Entered amount exceeds pending amount", { autoClose: 2000 });
+    }
+  }, [order.pending, pendingbankamt, pendingcashamt, pendingupiamt]);
   const handlependingbank = async (orderId) => {
     console.log(orderId);
-  
-    dispatch(updatependingbank_tnagar(orderId, pendingbankamt,pendingbankacct));
-    dispatch(updatesalesexpensebankupdate(orderId,pendingBANK));
+    if((order.pending-pendingbankamt-pendingcashamt-pendingupiamt)>0)
+    {
+      dispatch(updatependingbank_tnagar(orderId, pendingbankamt,pendingbankacct));
+      dispatch(updatesalesexpensebankupdate(orderId,pendingBANK));
+    }
+    else {
+      // Display toast message if entered amount is greater than pending amount
+      toast.error("Entered amount should be less than or equal to pending amount", ToastObjects);
+    }
+    
   //  history.push(`/ordert/${orderId}`);
   };
   const handlependingupi = async (orderId) => {
     console.log(orderId);
+    if((order.pending-pendingbankamt-pendingcashamt-pendingupiamt)>0)
+    {
+      dispatch(updatependingupi_tnagar(orderId, pendingupiamt,pendingupiacct));
+      dispatch(updatesalesexpenseupiupdate(orderId,pendingUPI));
   
-    dispatch(updatependingupi_tnagar(orderId, pendingupiamt,pendingupiacct));
-    dispatch(updatesalesexpenseupiupdate(orderId,pendingUPI));
-    //history.push(`/ordert/${orderId}`);
+    }
+    else {
+      // Display toast message if entered amount is greater than pending amount
+      toast.error("Entered amount should be less than or equal to pending amount", ToastObjects);
+    }
+        //history.push(`/ordert/${orderId}`);
   };
   const handleStatusChange = async (orderId, itemId) => {
     const selectedProduct = order.orderItems.find((item) => item._id === itemId);
@@ -379,7 +406,7 @@ const history = useHistory();
             </td>
             <td>{item.price} </td>
             <td>{item.qty} </td>
-            <td>{item.height} X {item.width}</td> {/**size update */}
+            <td>{item.size}</td> {/**size update */}
             <td className="text-end"> ₹{item.qty * item.price}</td>
           
             {/* ... other columns ... */}
@@ -399,60 +426,47 @@ const history = useHistory();
   </div>
 </td>
 <td>
-    <div className="d-flex align-items-center">
-      <select
-        value={selectedStatus}
-        onChange={(e) => setSelectedStatus(e.target.value)}
-      >
-        {item.isproductdelivered && (
-          <option value="">Select Status</option>
-        )}
-        {!item.isproductdelivered && !item.isproducttobetaken && (
-          <>
-            <option value="">Select Status</option>
-            <option value="toBeTaken">To Be Taken</option>
-            <option value="delivered">Delivered</option>
-          </>
-        )}
-        {item.isproducttobetaken && !item.isproductdelivered && (
-          <>
-            <option value="">Select Status</option>
-            <option value="delivered">Delivered</option>
-          </>
-        )}
-      </select>
- {/*     {selectedStatus && (
+  <div className="d-flex flex-column align-items-center">
+    <select
+      value={selectedStatus}
+      onChange={(e) => setSelectedStatus(e.target.value)}
+      className="form-select mb-2"
+    >
+      {item.isproductdelivered && (
+        <option value="">Select Status</option>
+      )}
+      {!item.isproductdelivered && !item.isproducttobetaken && (
         <>
-        {loadingisproductDelivered && <Loading />}
-        <button
-          onClick={() => handleStatusChange(order._id, item._id)}
-          className="btn btn-dark ms-2"
-        > 
-          Update {selectedStatus.toUpperCase()}
-        </button>
+          <option value="">Select Status</option>
+          <option value="toBeTaken">To Be Taken</option>
+          <option value="delivered">Delivered</option>
         </>
       )}
-      */}
-              {selectedStatus && item.isproductdelivered ? (
-                    <button className="btn btn-success col-12"
-                    >
-                      Delivered AT ({" "}
-                      {moment(order.isproductdelivered).format("MMM Do YY")})
-                    </button>
-                  ) : (
-                    <>
-                      {loadingisproductDelivered && <Loading />}
-                      {loadingisproducttobetaken && <Loading />}
-                      <button
-                        onClick={() => handleStatusChange(order._id, item._id)}
-                        className="btn btn-dark col-12"
-                      >
-                        Update as {selectedStatus.toUpperCase()}
-                      </button>
-                    </>
-                  )}      
-    </div>
-  </td>
+      {item.isproducttobetaken && !item.isproductdelivered && (
+        <>
+          <option value="">Select Status</option>
+          <option value="delivered">Delivered</option>
+        </>
+      )}
+    </select>
+    {selectedStatus && item.isproductdelivered ? (
+      <button className="btn btn-success mb-2 col-12">
+        Delivered AT ({moment(order.isproductdelivered).format("MMM Do YY")})
+      </button>
+    ) : (
+      <>
+        {loadingisproductDelivered && <Loading />}
+        {loadingisproducttobetaken && <Loading />}
+        <button
+          onClick={() => handleStatusChange(order._id, item._id)}
+          className="btn btn-dark col-12"
+        >
+          Update
+        </button>
+      </>
+    )}
+  </div>
+</td>
   </tr>
           
         ))}
@@ -476,15 +490,20 @@ const history = useHistory();
                   <b className="h5">₹{order.grandtotal}</b>
                 </dd>
               </dl>
-              <dl className="dlist">
-              <dt>Pending :</dt>
-                <dd>
-                  <b className="h5">₹{order.pending}</b>
-                </dd>
+              <>
+      <dl className="dlist">
+        <dt>Pending :</dt>
+        <dd>
+          {order.pending - pendingbankamt - pendingcashamt - pendingupiamt >= 0 ? (
+            <b className="h5">₹{order.pending - pendingbankamt - pendingcashamt - pendingupiamt}</b>
+          ) : null}
+        </dd>
+      </dl>
+    </>
 
 
 
-                </dl>
+             
 
                 
                 <dl className="dlist">
@@ -524,10 +543,10 @@ const history = useHistory();
   {order.cash_pending.length > 0 && (
     order.cash_pending.map((cashItem, index) => (
       <div key={index}>
-        <dt>{`Amount paid with cash_pending ${index + 1}:`}</dt>
+        <dt>{`Pending amount paid with cash in term ${index + 1}:`}</dt>
         <dd>
           <b className="h5">₹{cashItem.amount}</b>
-          <span>{` Acct No: ${cashItem.acct_no}`}</span>
+          
         </dd>
       </div>
     ))
@@ -537,7 +556,7 @@ const history = useHistory();
   {order.upi_pending.length > 0 && (
     order.upi_pending.map((upiItem, index) => (
       <div key={index}>
-        <dt>{`Amount paid with Pending amount with UPI ${index + 1}:`}</dt>
+        <dt>{`Pending amount paid with UPI in term ${index + 1}:`}</dt>
         <dd>
           <b className="h5">₹{upiItem.amount}</b>
           <span>{` Acct No: ${upiItem.acct_no}`}</span>
@@ -550,7 +569,7 @@ const history = useHistory();
   {order.bank_pending.length > 0 && (
     order.bank_pending.map((bankItem, index) => (
       <div key={index}>
-        <dt>{`Amount paid with pending amount with bank ${index + 1}:`}</dt>
+        <dt>{`Pending amount paid with bank in term ${index + 1}:`}</dt>
         <dd>
           <b className="h5">₹{bankItem.amount}</b>
           <span>{` Acct No: ${bankItem.acct_no}`}</span>
@@ -559,67 +578,66 @@ const history = useHistory();
     ))
   )}
 </dl>
-                  <dl className="mb-4">
-                    <label className="form-label">Pending Cash update</label>
-                    <textarea
-                      placeholder="Type Height"
-                       className="form-control"
-                          
-                      required
-                      value={pendingcashamt}
-                      onChange={(e) => setpendingCash(e.target.value)}
-                      ></textarea>
-                      {loadingPay && <Loading />}
-                            <button type="button" onClick={() => handlependingcash(order._id)}>
-                            UPDATE
-                             </button>
-                  </dl>
-                  <dl className="mb-4">
-                    <label className="form-label">Pending UPI update</label>
-                    <textarea
-                      placeholder="Type Height"
-                       className="form-control"
-                          
-                      required
-                      value={pendingupiamt}
-                      onChange={(e) => setpendingUpi(e.target.value)}
-                      ></textarea>
-                                          <textarea
-                      placeholder="Type Height"
-                       className="form-control"
-                          
-                      required
-                      value={pendingupiacct}
-                      onChange={(e) => setpendingUpiacctno(e.target.value)}
-                      ></textarea>
-                                            {loadingPay && <Loading />}
-                            <button type="button" onClick={() => handlependingupi(order._id)}>
-                               UPDATE
-                             </button>
-                  </dl>
-                  <dl className="mb-4">
-                    <label className="form-label">Pending Bank update</label>
-                    <textarea
-                      placeholder="Type Height"
-                       className="form-control"
-                          
-                      required
-                      value={pendingbankamt}
-                      onChange={(e) => setpendingBank(e.target.value)}
-                      ></textarea>
-                                          <textarea
-                      placeholder="Type Height"
-                       className="form-control"
-                          
-                      required
-                      value={pendingbankacct}
-                      onChange={(e) => setpendingBankacctno(e.target.value)}
-                      ></textarea>
-                                            {loadingPay && <Loading />}
-                            <button type="button" onClick={() => handlependingbank(order._id)}>
-                            UPDATE
-                             </button>
-                  </dl>
+{order.pending > 0 && (
+  <>
+    <dl className="mb-4">
+      <label className="form-label">Pending Cash update</label>
+      <textarea
+        placeholder="Type Height"
+        className="form-control"
+        required
+        value={pendingcashamt}
+        onChange={(e) => setpendingCash(e.target.value)}
+      ></textarea>
+      {loadingPay && <Loading />}
+      <button type="button" onClick={() => handlependingcash(order._id)}>
+        UPDATE
+      </button>
+    </dl>
+    <dl className="mb-4">
+      <label className="form-label">Pending UPI update</label>
+      <textarea
+        placeholder="Type Height"
+        className="form-control"
+        required
+        value={pendingupiamt}
+        onChange={(e) => setpendingUpi(e.target.value)}
+      ></textarea>
+      <textarea
+        placeholder="Type Height"
+        className="form-control"
+        required
+        value={pendingupiacct}
+        onChange={(e) => setpendingUpiacctno(e.target.value)}
+      ></textarea>
+      {loadingPay && <Loading />}
+      <button type="button" onClick={() => handlependingupi(order._id)}>
+        UPDATE
+      </button>
+    </dl>
+    <dl className="mb-4">
+      <label className="form-label">Pending Bank update</label>
+      <textarea
+        placeholder="Type Height"
+        className="form-control"
+        required
+        value={pendingbankamt}
+        onChange={(e) => setpendingBank(e.target.value)}
+      ></textarea>
+      <textarea
+        placeholder="Type Height"
+        className="form-control"
+        required
+        value={pendingbankacct}
+        onChange={(e) => setpendingBankacctno(e.target.value)}
+      ></textarea>
+      {loadingPay && <Loading />}
+      <button type="button" onClick={() => handlependingbank(order._id)}>
+        UPDATE
+      </button>
+    </dl>
+  </>
+)}
            
               <dl className="dlist">
                 <dt className="text-muted">Status:</dt>
@@ -657,13 +675,7 @@ const history = useHistory();
 
             </article>
           </td>
-          <button  className="btn btn-success ms-2" onClick={downloadInvoice}>
-                  <i className="fas fa-print"></i>
-                </button>
 
-                <Link to="/billing" className="btn btn-dark text-white">
-          Back To Orders
-        </Link>
         </tr>
 
       </tbody>

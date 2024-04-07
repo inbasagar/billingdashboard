@@ -6,10 +6,12 @@ import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 //import Orders from "./Orders";
 import Customer from "../users/Customer"
+import User from "./User";
 import Pagination from "../products/pagination";
-import { listCustomer,  listcustomers,deleteCustomer } from "../../Redux/Actions/customerActions";
+import { listCustomer,  listcustomers,deleteCustomer, listCustomerDetails } from "../../Redux/Actions/customerActions";
 import { saveShippingAddress } from "../../Redux/Actions/cartActions";
 import { listProducts } from "../../Redux/Actions/ProductActions";
+import { deleteUser, listUser, listUserDetails } from "../../Redux/Actions/userActions";
 //import { deleteCustomer } from './../../Redux/Actions/customerActions';
 
 
@@ -33,13 +35,13 @@ const UserComponent_tnagar = (props) => {
   const dispatch = useDispatch();
   let history = useHistory();
 
-  const customerList = useSelector((state) => state.customerList);
-  const { loading, error, customers, page, pages } = customerList;
+  const userList = useSelector((state) => state.userList);
+  const { loading, error, users, page, pages } = userList;
  //const { loading, error, customers, page, pages } = customerList;
 
   //console.log('Customers:', customers);
-  const customerDelete = useSelector((state) => state.customerDelete);
-  const { error: errorDelete, success: successDelete } = customerDelete;
+  const userDelete = useSelector((state) => state.userDelete);
+  const { error: errorDelete, success: successDelete } = userDelete;
   //const UserList = useSelector((state) => state.UserList);
   //const { loading, error, users, page, pages } = UserList;
   const submitHandler = (e) => {
@@ -61,12 +63,15 @@ const UserComponent_tnagar = (props) => {
 
   const deleteCustomerHandler = (id) => {
     if (window.confirm("Are you sure??")) {
-      dispatch(deleteCustomer(id));
+      dispatch(deleteUser(id));
     }
   };
 
   useEffect(() => {
-    dispatch(listcustomers(keyword, pagenumber));
+    dispatch(listUser(keyword, pagenumber));
+    
+
+ 
   }, [dispatch, keyword, pagenumber, successDelete]);
 
 
@@ -124,16 +129,16 @@ const UserComponent_tnagar = (props) => {
             <Message variant="alert-danger">{error}</Message>
           ) : (
             <>
-              {customers.map((customer) => (
-                <tr key={customer._id}>
-                  <Customer customer={customer} />
-                  <td>{customer.name}</td>
-                  <td>{customer.email}</td>
-                  <td>{customer.phone}</td>
-                  <td>{customer.address}</td>
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <User user={user} />
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.address}</td>
                   <td>
                     <Link
-                      to={`/customer/${customer._id}/edit`}
+                      to={`/user/${user._id}/edit`}
                       className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
                     >
                      <i class="fa fa-eye" aria-hidden="true"></i>
@@ -142,7 +147,7 @@ const UserComponent_tnagar = (props) => {
                   <td>
                     <Link
                       to="#"
-                      onClick={() => orderHandler(customer)}
+                      onClick={() => orderHandler(user)}
                       className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
                     >
                       <i class="fa fa-truck" aria-hidden="true"></i>
@@ -151,7 +156,7 @@ const UserComponent_tnagar = (props) => {
                   <td>
                     <Link
                       to="#"
-                      onClick={() => deleteCustomerHandler(customer._id)}
+                      onClick={() => deleteCustomerHandler(user._id)}
                       className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6"
                     >
                       <i className="fas fa-trash-alt"></i>

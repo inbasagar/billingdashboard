@@ -26,12 +26,13 @@ const AddOrderedProductMain = () => {
   const [width, setWidth] = useState(""); 
   const [isavailability,setIsavailability]= useState("");
   const[branch,setBranch]=useState("");
+  const[size,setSize]=useState("");
   {/*}
   const [price_11X11,setPrice11X11]=useState(0);
   const [price_15X12,setPrice15X12]=useState(0);
   */} 
   const dispatch = useDispatch();
-
+  const userInfo = useSelector((state) => state.userLogin.userInfo);
   const productCreate = useSelector((state) => state.productCreate);
   const { loading, error, product } = productCreate;
 
@@ -44,8 +45,9 @@ const AddOrderedProductMain = () => {
       setCountInStock(0);
       setImage("");
       setPrice();
-      setHeight();
-      setWidth();
+    //  setHeight();
+    //  setWidth();
+    setSize()
       setIsavailability("ordered");
       setBranch("");
       {/** 
@@ -62,11 +64,11 @@ const AddOrderedProductMain = () => {
     const buttonClicked = e.nativeEvent.submitter.name;
   
     if (buttonClicked === "addToTnagar") {
-      dispatch(createOrderedProducttnagar(name, price, description, image, countInStock, height, width, "ordered", "tnagar"));
+      dispatch(createOrderedProducttnagar(name, price, description, image, countInStock, size, "ordered", "tnagar"));
     }
     if(buttonClicked === "addToAnnanagar")
     {
-      dispatch(createProductannanagar(name, price, description, image, countInStock, height, width, "ordered", "annanagar"));
+      dispatch(createProductannanagar(name, price, description, image, countInStock, size, "ordered", "annanagar"));
     } 
 
   };
@@ -76,10 +78,10 @@ const AddOrderedProductMain = () => {
       <section className="content-main" style={{ maxWidth: "1200px" }}>
         <form onSubmit={(e) => submitHandler(e, "tnagar")}>
           <div className="content-header">
-            <Link to="/products" className="btn btn-danger text-white">
-              Go to products
+            <Link to="neworders/" className="btn btn-danger text-white">
+              Go to Orders list
             </Link>
-            <h2 className="content-title">Add product</h2>
+            <h2 className="content-title">Create New Order</h2>
           </div>
 
           <div className="row mb-4">
@@ -131,25 +133,15 @@ const AddOrderedProductMain = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Height</label>
-                    <textarea
-                      placeholder="Type Height"
-                       className="form-control"
-                          
-                      required
-                      value={height}
-                      onChange={(e) => setHeight(e.target.value)}
-                      ></textarea>
-                  </div>
-                  <div className="mb-4">
-                    <label className="form-label">width</label>
+                    <label className="form-label">size</label>
                     <textarea
                         placeholder="Type width"
                         className="form-control"
-                          
-                        required
-                        value={width}
-                        onChange={(e) => setWidth(e.target.value)}
+                 
+                        id="product_title"
+                      
+                        value={size}
+                        onChange={(e) => setSize(e.target.value)}
                     ></textarea>
                   </div>
                   <div className="mb-4">
@@ -226,23 +218,28 @@ const AddOrderedProductMain = () => {
               </div>
             </div>
             <div className="col-lg-4">
+            {userInfo && ((userInfo.isOwner==true)||((userInfo.isAdmin === true)&&(userInfo.branch=='tnagar')))&&(
             <div className="content-header">
-              <button type="submit" className="btn btn-primary mb-2" name="all">
-                Publish Now
-              </button>
-             
+
+              
               <button type="submit" className="btn btn-primary mb-2" name="addToTnagar">
                 Add to T.Nagar
               </button>
 
             </div>
+            )}
+            
             <div className="content-header">
+            {userInfo && ((userInfo.isOwner==true)||((userInfo.isAdmin === true)&&(userInfo.branch=='annanagar')))&&(
               <button type="submit" className="btn btn-primary mb-2" name="addToAnnanagar">
                 Add to Annanagar
               </button>
+            )}
+            {userInfo && ((userInfo.isOwner==true)||((userInfo.isAdmin === true)&&(userInfo.branch=='adayar')))&&(
               <button type="submit" className="btn btn-primary mb-2" name="addToTnagar">
                 Add to Adayar
               </button>
+            )}
             </div>
           </div>
           

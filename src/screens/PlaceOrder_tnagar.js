@@ -34,6 +34,7 @@ const PlaceOrderScreen_tnagar = ({ history }) => {
   const[bankamt,setbankamt]=useState(0);
   const[bankacctno,setbankacctno]=useState(0);
   const[tax,setTax]=useState(0);
+  const [notes, setNotes] = useState(""); // State for notes
   const { userInfo } = userLogin;
 
   const addDecimals = (num) => {
@@ -142,7 +143,9 @@ const placeOrderHandler = async (orderItems, dispatch) => {
         cash:cash,
         bank:bank,
         pending:pendingvar,
-
+        gstno:cart.shippingAddress.GSTNO,
+        Notes:notes,
+       
       }));
       //console.log(createOrder);
       if (createdOrder) {
@@ -277,6 +280,10 @@ const placeOrderHandler = async (orderItems, dispatch) => {
                       <Link to={`/products/${item.product}`}>
                         <h6>{item.name}</h6>
                       </Link>
+                    </div>
+                    <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">
+                      <h4>SIZE</h4>
+                      <h6>{item.size}</h6>
                     </div>
                     <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">
                       <h4>QUANTITY</h4>
@@ -456,6 +463,17 @@ const placeOrderHandler = async (orderItems, dispatch) => {
                     )}
                   </td>
                 </tr>
+                <tr>
+                  <td>
+                <h6>ADD NOTES</h6>
+            <textarea
+              className="form-control"
+              rows="3"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            ></textarea>
+            </td>
+            </tr>
               </tbody>
             </table>
             {cart.cartItems.length === 0 ? null : (
@@ -466,6 +484,7 @@ const placeOrderHandler = async (orderItems, dispatch) => {
             )}
           </div>
         </div>
+        {/** 
         <div className="container d-flex justify-content-center align-items-center login-center">
         <form
           className="Login2 col-md-8 col-lg-4 col-11"
@@ -510,13 +529,14 @@ const placeOrderHandler = async (orderItems, dispatch) => {
                 <label className="form-check-label">Cash on Delivery</label>
               </div>
             </div>
-            */}
+            
           </div>
         
 
           <button type="submit">Continue</button>
         </form>
       </div>
+          */}
       </div>
 
     </>
